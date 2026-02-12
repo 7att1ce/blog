@@ -1,0 +1,885 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>个人Windows自定义设置 | Lattice's Blog</title><meta name="author" content="Lattice"><meta name="copyright" content="Lattice"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文已过期, 未来会被删除, 请参考新发布的内容  个人Windows设置方案, 仅作备份用, 不具有参考价值  Windows设置 系统  屏幕  显示卡  窗口化游戏优化: 关 高级图形设置  可变刷新频率: 关       通知  通知  在锁屏界面上显示通知: 关 在锁屏界面上显示提醒和VoIP来电: 关   自动启用请勿打扰  Windows功能更新后的第一小时: 关   其他设置: 全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="个人Windows自定义设置">
+<meta property="og:url" content="https://7att1ce.github.io/blog/2024/12/06/self-windows-settings/index.html">
+<meta property="og:site_name" content="Lattice&#39;s Blog">
+<meta property="og:description" content="本文已过期, 未来会被删除, 请参考新发布的内容  个人Windows设置方案, 仅作备份用, 不具有参考价值  Windows设置 系统  屏幕  显示卡  窗口化游戏优化: 关 高级图形设置  可变刷新频率: 关       通知  通知  在锁屏界面上显示通知: 关 在锁屏界面上显示提醒和VoIP来电: 关   自动启用请勿打扰  Windows功能更新后的第一小时: 关   其他设置: 全">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://redive.estertion.win/bang/card/003070_card_after_training.webp">
+<meta property="article:published_time" content="2024-12-06T23:01:36.000Z">
+<meta property="article:modified_time" content="2025-11-07T12:28:01.000Z">
+<meta property="article:author" content="Lattice">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Windows Settings">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://redive.estertion.win/bang/card/003070_card_after_training.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "个人Windows自定义设置",
+  "url": "https://7att1ce.github.io/blog/2024/12/06/self-windows-settings/",
+  "image": "https://redive.estertion.win/bang/card/003070_card_after_training.webp",
+  "datePublished": "2024-12-06T23:01:36.000Z",
+  "dateModified": "2025-11-07T12:28:01.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lattice",
+      "url": "https://7att1ce.github.io/blog"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blog/img/favicon.ico"><link rel="canonical" href="https://7att1ce.github.io/blog/2024/12/06/self-windows-settings/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blog/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '个人Windows自定义设置',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blog/img/avatar.png" onerror="this.onerror=null;this.src='/blog/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/blog/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/blog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/blog/rss/"><i class="fa-fw fas fa-link"></i><span> 新番 rss</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/blog/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://redive.estertion.win/bang/card/003070_card_after_training.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blog/"><span class="site-name">Lattice's Blog</span></a><a class="nav-page-title" href="/blog/"><span class="site-name">个人Windows自定义设置</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/blog/rss/"><i class="fa-fw fas fa-link"></i><span> 新番 rss</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/blog/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">个人Windows自定义设置<a class="post-edit-link" href="https://github.com/7att1ce/github-pages-source/edit/blog/source/_posts/self-windows-settings.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-06T23:01:36.000Z" title="发表于 2024-12-06 23:01:36">2024-12-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-11-07T12:28:01.000Z" title="更新于 2025-11-07 12:28:01">2025-11-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blog/categories/%E6%9D%82%E9%A1%B9/">杂项</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;这是一篇发布于&quot;,&quot;messageNext&quot;:&quot;天前的文章, 部分信息可能已经过时, 请注意甄别.&quot;,&quot;postUpdate&quot;:&quot;2025-11-07 12:28:01&quot;}" hidden></div><p><font color=red size=6>本文已过期, 未来会被删除, 请参考新发布的内容</font></p>
+<blockquote>
+<p>个人Windows设置方案, 仅作备份用, 不具有参考价值</p>
+</blockquote>
+<h2 id="Windows设置">Windows设置</h2>
+<h3 id="系统">系统</h3>
+<ul>
+<li>屏幕
+<ul>
+<li>显示卡
+<ul>
+<li>窗口化游戏优化: 关</li>
+<li>高级图形设置
+<ul>
+<li>可变刷新频率: 关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通知
+<ul>
+<li>通知
+<ul>
+<li>在锁屏界面上显示通知: 关</li>
+<li>在锁屏界面上显示提醒和VoIP来电: 关</li>
+</ul>
+</li>
+<li>自动启用请勿打扰
+<ul>
+<li>Windows功能更新后的第一小时: 关</li>
+</ul>
+</li>
+<li>其他设置: 全部关闭</li>
+</ul>
+</li>
+<li>电源和电池
+<ul>
+<li>屏幕, 睡眠和休眠超时: 全部从不</li>
+<li>盖子, 电源和睡眠按钮控件: 全部不执行任何操作</li>
+</ul>
+</li>
+<li>存储
+<ul>
+<li>存储感知
+<ul>
+<li>配置清理计划
+<ul>
+<li>如果回收站中的文件存在超过以下时长，请将其删除: 从不</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>多任务处理
+<ul>
+<li>贴靠窗口
+<ul>
+<li>将鼠标悬停在窗口的最大化按钮上时显示贴靠布局: 开</li>
+<li>将窗口拖动到屏幕顶部时显示贴靠按钮: 开</li>
+</ul>
+</li>
+<li>对齐或按Alt+Tab时显示应用中的标签页: 不显示选项卡</li>
+</ul>
+</li>
+<li>开发者选项
+<ul>
+<li>结束任务: 开</li>
+<li>文件资源管理器
+<ul>
+<li>显示文件扩展名: 开</li>
+<li>显示隐藏和系统文件: 开</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>系统组件: 需要Remove-Appxpackage命令卸载</li>
+<li>可选功能: 删除不需要的功能
+<ul>
+<li>更多功能: 删除不需要的功能</li>
+</ul>
+</li>
+<li>系统信息
+<ul>
+<li>设备规格
+<ul>
+<li>高级系统设置
+<ul>
+<li>远程
+<ul>
+<li>允许远程协助连接这台电脑: 关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="蓝牙和其他设备">蓝牙和其他设备</h3>
+<ul>
+<li>笔和Windows Ink
+<ul>
+<li>手写面板设置
+<ul>
+<li>用手指书写: 关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="网络和Internet">网络和Internet</h3>
+<ul>
+<li>WLAN
+<ul>
+<li>随机硬件地址: 开</li>
+</ul>
+</li>
+</ul>
+<h3 id="个性化">个性化</h3>
+<ul>
+<li>选择要应用的主题: Windows(深色)</li>
+<li>主题
+<ul>
+<li>当前主题: Windows(深色)</li>
+<li>桌面图标设置
+<ul>
+<li>桌面图标: 全部取消勾选</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>动态光效
+<ul>
+<li>在我的设备上使用动态光效: 关</li>
+<li>前台中的兼容应用始终控制照明: 关</li>
+<li>亮度: 最低</li>
+<li>效果
+<ul>
+<li>匹配我的Windows主题色: 关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>锁屏界面
+<ul>
+<li>个性化锁屏界面: 图片
+<ul>
+<li>在锁屏界面上获取花絮, 提示, 技巧等: 关</li>
+</ul>
+</li>
+<li>锁屏界面状态: 无</li>
+</ul>
+</li>
+<li>开始
+<ul>
+<li>布局: 更多固定项</li>
+<li>显示最近添加的应用: 关</li>
+<li>在开始菜单中显示推荐的文件, 文件资源管理器中的最新文件, 以及跳转列表中的项: 关</li>
+<li>显示有关提示, 快捷方式, 新应用等的建议: 关</li>
+<li>显示与帐户相关的通知: 关</li>
+<li>文件夹: 全部打开</li>
+</ul>
+</li>
+<li>任务栏
+<ul>
+<li>任务栏项
+<ul>
+<li>搜索: 隐藏</li>
+<li>任务视图: 关</li>
+<li>小组件: 关</li>
+</ul>
+</li>
+<li>系统托盘图标
+<ul>
+<li>触摸键盘: 从不</li>
+</ul>
+</li>
+<li>其他系统托盘图标: 全部打开</li>
+<li>任务栏行为
+<ul>
+<li>任务栏对齐方式: 靠左</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="应用">应用</h3>
+<ul>
+<li>安装的应用
+<ul>
+<li>卸载无用软件</li>
+</ul>
+</li>
+<li>高级应用设置
+<ul>
+<li>跨设备共享: 关闭</li>
+<li>存档应用: 关闭</li>
+<li>应用执行别名: 关闭全部</li>
+</ul>
+</li>
+<li>离线地图
+<ul>
+<li>地图更新
+<ul>
+<li>连接电源和开启Wi-Fi时自动更新: 关闭</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>可打开网站的应用: 全部关闭</li>
+<li>启动: 全部关闭
+<blockquote>
+<p>Radeon Software Startup Task需要先打开再关闭</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="帐户">帐户</h3>
+<ul>
+<li>登录选项
+<blockquote>
+<p>没有密码会缺少类似经过多长时间后自动锁定屏幕的选项</p>
+</blockquote>
+<ul>
+<li>使用我的登录信息在更新后自动完成设置: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+<h3 id="时间和语言">时间和语言</h3>
+<ul>
+<li>日期和时间
+<ul>
+<li>自动设置时区
+<ul>
+<li>时区: 修改为UTC+8(北京…)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>语言和区域
+<ul>
+<li>简体中文
+<ul>
+<li>语言选项
+<ul>
+<li>微软拼音
+<ul>
+<li>键盘选项
+<ul>
+<li>常规
+<ul>
+<li>默认模式
+<ul>
+<li>选择输入法默认模式: 改为英语</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>按键
+<ul>
+<li>模式切换
+<ul>
+<li>中/英文模式切换: 取消勾选shift</li>
+<li>中/英文标点切换: 无</li>
+</ul>
+</li>
+<li>候选字词导航
+<ul>
+<li>翻页按键: 全部取消勾选</li>
+</ul>
+</li>
+<li>热键
+<ul>
+<li>简体/繁体中文输入切换: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>词库和自学习
+<ul>
+<li>自学习
+<ul>
+<li>清除输入历史记录: 点击</li>
+</ul>
+</li>
+<li>专业词典
+<ul>
+<li>选择启用哪些专业词典: 取消勾选全部</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>高级
+<ul>
+<li>人名输入: 开-&gt;关</li>
+<li>U模式输入: 开-&gt;关</li>
+<li>V模式输入: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>输入
+<ul>
+<li>触摸键盘
+<ul>
+<li>在我输入内容时播放按键音: 开-&gt;关</li>
+<li>每句话的首字母大写: 开-&gt;关</li>
+<li>显示语音输入麦克风按钮: 开-&gt;关</li>
+<li>显示触摸键盘: 改为从不</li>
+</ul>
+</li>
+<li>键入见解
+<ul>
+<li>键入见解: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="游戏">游戏</h3>
+<ul>
+<li>Game Bar
+<ul>
+<li>允许控制器打开Game Bar: 开-&gt;关</li>
+</ul>
+</li>
+<li>摄像
+<ul>
+<li>最大录制长度: 30分钟</li>
+<li>录制游戏时录制音频: 关</li>
+<li>录制游戏时录制鼠标光标: 关</li>
+</ul>
+</li>
+</ul>
+<h3 id="辅助功能">辅助功能</h3>
+<ul>
+<li>鼠标指针与触控
+<ul>
+<li>触控显示器
+<ul>
+<li>使圆圈更深, 更大: 关-&gt;开</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>讲述人
+<ul>
+<li>&quot;讲述人&quot;的键盘快捷方式: 开-&gt;关</li>
+<li>&quot;讲述人&quot;主页
+<ul>
+<li>&quot;讲述人&quot;启动时显示&quot;讲述人&quot;主页: 关</li>
+</ul>
+</li>
+<li>选择语音
+<ul>
+<li>速度: 最小</li>
+<li>音调: 最小</li>
+<li>音量: 最小</li>
+</ul>
+</li>
+<li>在讲述人说话时调低其他应用的音量: 关</li>
+<li>详细信息级别: 纯文本
+<ul>
+<li>在读取标点符号时稍微暂停: 关</li>
+</ul>
+</li>
+<li>按钮和控件的上下文级别: 无上下文
+<ul>
+<li>阅读有关如何与按钮和其他控件交互的提示: 关</li>
+<li>告诉我为什么无法执行操作: 关</li>
+</ul>
+</li>
+<li>当我键入时让讲述人报出: 全部取消勾选</li>
+<li>讲述人键: Insert</li>
+<li>显示讲述人光标: 关</li>
+<li>同步讲述人光标和系统焦点: 关</li>
+<li>启用讲述人扩展: 关
+<ul>
+<li>在讲述人启动时查找和下载新的扩展: 关</li>
+</ul>
+</li>
+<li>获取图像描述, 页面标题和热门链接: 关</li>
+</ul>
+</li>
+<li>键盘
+<ul>
+<li>粘滞键
+<ul>
+<li>粘滞键的键盘快捷方式: 开-&gt;关</li>
+<li>在行中按两次时锁定快捷键: 开-&gt;关</li>
+</ul>
+</li>
+<li>筛选键
+<ul>
+<li>筛选键的键盘快捷方式: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="隐私和安全性">隐私和安全性</h3>
+<ul>
+<li>设备加密
+<ul>
+<li>设备加密: 开-&gt;关
+<blockquote>
+<p>疑似安装Windows后<strong>初次引导系统</strong>并且存在<strong>已经存在分区的其他硬盘</strong>时此选项会消失<br>
+鼠标无法定位并点击弹出窗口的确认选项</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>常规
+<ul>
+<li>允许网站通过访问我的语言列表来显示本地相关内容: 开-&gt;关</li>
+<li>允许Windows跟踪应用启动, 以改进&quot;开始&quot;和搜索内容: 开-&gt;关</li>
+<li>在设置应用中为我显示建议的内容: 开-&gt;关</li>
+</ul>
+</li>
+<li>墨迹书写和键入个性化
+<ul>
+<li>自定义墨迹书写和键入词典: 开-&gt;关</li>
+<li>自定义词典
+<ul>
+<li>清除你的自定义词典: 点击</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>诊断和反馈
+<ul>
+<li>删除诊断数据
+<ul>
+<li>删除: 点击</li>
+</ul>
+</li>
+<li>反馈频率: 自动(推荐)-&gt;从不</li>
+</ul>
+</li>
+<li>活动历史记录
+<ul>
+<li>活动历史记录
+<ul>
+<li>在此设备上存储我的活动历史记录: 开-&gt;关</li>
+</ul>
+</li>
+<li>清除此帐户的活动历史记录: 点击清除历史记录</li>
+</ul>
+</li>
+<li>搜索权限
+<ul>
+<li>安全搜索: 适中-&gt;关闭</li>
+<li>云内容搜索
+<ul>
+<li>Microsoft账户: 开-&gt;关</li>
+<li>工作或学习账户: 开-&gt;关</li>
+</ul>
+</li>
+<li>历史记录
+<ul>
+<li>此设备上的搜索历史记录: 开-&gt;关</li>
+<li>清除设备搜索历史记录: 点击</li>
+<li>更多设置
+<ul>
+<li>显示搜索要点: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>位置
+<ul>
+<li>位置历史记录: 点击清除</li>
+<li>允许位置覆盖: 开-&gt;关</li>
+<li>在应用请求位置时发出通知: 开-&gt;关</li>
+</ul>
+</li>
+<li>语音激活
+<ul>
+<li>允许应用访问语音激活服务: 开-&gt;关</li>
+<li>允许应用在设备锁定时使用语音激活: 开-&gt;关</li>
+</ul>
+</li>
+<li>通知
+<ul>
+<li>通知访问权限: 开-&gt;关</li>
+<li>让应用访问通知: 开-&gt;关</li>
+</ul>
+</li>
+<li>帐户信息
+<ul>
+<li>帐户信息访问权限: 开-&gt;关</li>
+<li>允许应用访问你的帐户信息: 开-&gt;关</li>
+</ul>
+</li>
+<li>联系人
+<ul>
+<li>联系人访问权限: 开-&gt;关</li>
+<li>允许应用访问你的联系人: 开-&gt;关</li>
+</ul>
+</li>
+<li>日历
+<ul>
+<li>日历访问权限: 开-&gt;关</li>
+<li>允许应用访问你的日历: 开-&gt;关</li>
+</ul>
+</li>
+<li>电话呼叫
+<ul>
+<li>电话呼叫访问权限: 开-&gt;关</li>
+<li>允许应用拨打电话: 开-&gt;关</li>
+</ul>
+</li>
+<li>通话记录
+<ul>
+<li>呼叫历史记录访问权限: 开-&gt;关</li>
+<li>允许应用访问你的呼叫历史记录: 开-&gt;关</li>
+</ul>
+</li>
+<li>电子邮件
+<ul>
+<li>电子邮件访问权限: 开-&gt;关</li>
+<li>允许应用访问你的电子邮件: 开-&gt;关</li>
+</ul>
+</li>
+<li>任务
+<ul>
+<li>任务访问权限: 开-&gt;关</li>
+<li>允许应用访问你的任务: 开-&gt;关</li>
+</ul>
+</li>
+<li>消息
+<ul>
+<li>短信访问权限: 开-&gt;关</li>
+<li>允许应用读取短信: 开-&gt;关</li>
+</ul>
+</li>
+<li>无线收发器
+<ul>
+<li>收音机控件访问权限: 开-&gt;关</li>
+<li>让应用控制设备无线电收发器: 开-&gt;关</li>
+</ul>
+</li>
+<li>其他设备
+<ul>
+<li>与未配对设备通信: 开-&gt;关</li>
+</ul>
+</li>
+<li>应用诊断
+<ul>
+<li>应用诊断访问权限: 开-&gt;关</li>
+<li>允许应用访问与其他应用有关的诊断信息: 开-&gt;关</li>
+</ul>
+</li>
+<li>文档
+<ul>
+<li>文档库访问权限: 开-&gt;关</li>
+<li>让应用访问文档库: 开-&gt;关</li>
+</ul>
+</li>
+<li>下载文件夹
+<ul>
+<li>下载文件夹访问权限: 开-&gt;关</li>
+<li>让应用访问下载文件夹: 开-&gt;关</li>
+</ul>
+</li>
+<li>音乐库
+<ul>
+<li>允许访问此设备上的音乐库: 开-&gt;关</li>
+<li>允许应用访问你的音乐库: 开-&gt;关</li>
+</ul>
+</li>
+<li>图片
+<ul>
+<li>图片库访问权限: 开-&gt;关</li>
+<li>让应用访问图片库: 开-&gt;关</li>
+</ul>
+</li>
+<li>视频
+<ul>
+<li>视频库访问权限: 开-&gt;关</li>
+<li>让应用访问视频库: 开-&gt;关</li>
+</ul>
+</li>
+<li>文件系统
+<ul>
+<li>文件系统访问权限: 开-&gt;关</li>
+<li>让应用访问文件系统: 开-&gt;关</li>
+</ul>
+</li>
+<li>屏幕截图边框
+<ul>
+<li>屏幕截图边框设置访问权限: 开-&gt;关</li>
+<li>让应用关闭屏幕截图边框: 开-&gt;关</li>
+</ul>
+</li>
+<li>屏幕截图和屏幕录制
+<ul>
+<li>屏幕截图和屏幕录制访问权限: 开-&gt;关</li>
+<li>允许应用截取屏幕截图和屏幕录制: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+<h3 id="Windows更新">Windows更新</h3>
+<ul>
+<li>高级选项
+<ul>
+<li>接收其他Microsoft产品的更新: 关-&gt;开</li>
+<li>需要重新启动才能完成更新时通知我: 关-&gt;开</li>
+<li>传递优化
+<ul>
+<li>允许从其他设备下载: 开-&gt;关</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://7att1ce.github.io/blog">Lattice</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://7att1ce.github.io/blog/2024/12/06/self-windows-settings/">https://7att1ce.github.io/blog/2024/12/06/self-windows-settings/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://7att1ce.github.io/blog" target="_blank">Lattice's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/Windows/">Windows</a><a class="post-meta__tags" href="/blog/tags/Windows-Settings/">Windows Settings</a></div><div class="post-share"><div class="social-share" data-image="https://redive.estertion.win/bang/card/003070_card_after_training.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blog/2024/12/25/self-sing-box-config/" title="个人sing-box配置"><img class="cover" src="https://redive.estertion.win/bang/card/002073_card_after_training.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">个人sing-box配置</div></div><div class="info-2"><div class="info-item-1">123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120&#123;  &quot;dns&quot;: &#123;    &quot;servers&quot;: [      &#123;        &quot;tag&quot;: &quot;remote&quot;,        &quot;address&quot;: &quot;https://1.1.1.1/dns-query&quot;,        &quot;detour&quot;: &quot;select&quot;      &#125;,      ...</div></div></div></a><a class="pagination-related" href="/blog/2024/12/01/create-windows-pe/" title="在U盘创建Windows PE"><img class="cover" src="https://redive.estertion.win/bang/card/021078_card_after_training.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">在U盘创建Windows PE</div></div><div class="info-2"><div class="info-item-1"> 参考链接: https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11 https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11 https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe–use-a-single-usb-key-for-winpe-and-a-wim-file—wim?view=windows-11#option-1-create-a-multiple-partition-usb-drive  准备工作  下载 Windows ADK 10.1.26100.2454 (2024 年 12...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blog/2025/11/07/windows-11-after-install/" title="Windows 11 全新安装记录"><img class="cover" src="https://redive.estertion.win/bang/card/005082_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-07</div><div class="info-item-2">Windows 11 全新安装记录</div></div><div class="info-2"><div class="info-item-1"> 适用于 Windows 11 25H2, 其他版本未作测试, 并长期不定期更新. 测试平台: ASUS TUFGaming A16 2024 FA607PV, 其他平台可能存在差异.  具体安装过程  访问 uupdump, 选择 Windows 11 最新版本创建下载包, 注意选择 下载, 添加虚拟升级版本并转换为 ISO 镜像文件. 解压下载包, 修改 ConvertConfig.ini 中 CustomList   =0 为 CustomList   =1; 修改 CustomAppsList.txt 中去掉 Microsoft.WindowsNotepad_8wekyb3d8bbwe, Microsoft.WindowsCalculator_8wekyb3d8bbwe, Microsoft.ScreenSketch_8wekyb3d8bbwe, 以及 标题为### Media Codecs / Client non-N editions, Team edition 下的所有列表项的 # 注释, 然后以管理员身份运行 uup_download_windows.cmd, 等...</div></div></div></a><a class="pagination-related" href="/blog/2021/10/11/DHCP_Status_Coexist/" title="Windows同一网卡中DHCP与静态IP共存的方法"><img class="cover" src="https://redive.estertion.win/bang/card/005081_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2021-10-11</div><div class="info-item-2">Windows同一网卡中DHCP与静态IP共存的方法</div></div><div class="info-2"><div class="info-item-1">系统要求 Windows10 1703及以上版本(网络上查的, 自己没有验证) 原理 1703 创造者更新里微软悄悄地在netsh set interface命令里加了一个属性dhcpstaticipcoexistence, 把这个属性设为enabled就可以在一张网卡上同时配置一个 DHCP 的 IP 和多个静态 IP. 而在以往的 Windows 里情况是: 要么只用一个 DHCP 的 IP, 要么所有的多个 IP 都必须是静态的. 简单来讲就是利用netsh命令来实现的 具体方法 1234567891011# 命令须在管理员权限下运行netsh int ipv4 set interface &quot;以太网&quot; dhcpstaticipcoexistence=enable # 启用DHCP与静态IP共存, 看选项应该能理解意思: dhcp static ip coexistence# 具体修改时可能要修改网络连接名称, 即&quot;以太网&quot;netsh int ipv4 add address [name=]&quot;以太网&quot; [addr=]...</div></div></div></a><a class="pagination-related" href="/blog/2024/05/16/Windows-settings/" title="Windows 11一些设置项与注册表的关联(自用)"><img class="cover" src="https://redive.estertion.win/bang/card/002073_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2024-05-16</div><div class="info-item-2">Windows 11一些设置项与注册表的关联(自用)</div></div><div class="info-2"><div class="info-item-1"> 此为个人安装Windows 11后需要更改的设置(手动or通过注册表修改) 此设置仅限自用, 一些注册表对照可供参考 由于本人有非常严重的强迫症, 一些设置修改可能看起来很没有必要 借助Process Monitor进行对注册表的监测    Windows设置  系统  屏幕  显示卡  默认图形设置  可变刷新频率 关闭1reg add HKCU\Software\Microsoft\DirectX\UserGpuPreferences /v DirectXUserGlobalSettings /t REG_SZ /d VRROptimizeEnable=0; /f        通知  在锁屏界面上显示通知 关闭12reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings /v NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK /t REG_DWORD /d 0 /freg add HKCU\Software\Microsoft\Window...</div></div></div></a><a class="pagination-related" href="/blog/2024/12/01/create-windows-pe/" title="在U盘创建Windows PE"><img class="cover" src="https://redive.estertion.win/bang/card/021078_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2025-11-08</div><div class="info-item-2">在U盘创建Windows PE</div></div><div class="info-2"><div class="info-item-1"> 参考链接: https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11 https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11 https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe–use-a-single-usb-key-for-winpe-and-a-wim-file—wim?view=windows-11#option-1-create-a-multiple-partition-usb-drive  准备工作  下载 Windows ADK 10.1.26100.2454 (2024 年 12...</div></div></div></a><a class="pagination-related" href="/blog/2026/01/05/windows-auto-dev-setup/" title="Windows 10&#x2F;11 自动配置开发环境"><img class="cover" src="https://redive.estertion.win/bang/card/017077_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-09</div><div class="info-item-2">Windows 10&#x2F;11 自动配置开发环境</div></div><div class="info-2"><div class="info-item-1">在 Windows 10/11 上自动配置简单的开发环境 通过下载 standalone build 并写入环境变量实现 目前配置的环境:  C/C++: https://winlibs.com/ Python: https://docs.astral.sh/uv/ Git: https://git-scm.com/install/windows  脚本如下 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011021031041051061071081091101111121131141151161171181191201211221231241251261271281291301311321331341351361371381391401411...</div></div></div></a><a class="pagination-related" href="/blog/2024/08/28/fix-windows10-update/" title="修复Win10更新KB5034441的0x80070643错误"><img class="cover" src="https://redive.estertion.win/bang/card/008073_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2024-08-28</div><div class="info-item-2">修复Win10更新KB5034441的0x80070643错误</div></div><div class="info-2"><div class="info-item-1">原理是增加WinRE分区大小 参考https://support.microsoft.com/zh-cn/topic/kb5028997-%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F%E4%BB%A5%E5%AE%89%E8%A3%85-winre-%E6%9B%B4%E6%96%B0%E7%9A%84%E8%AF%B4%E6%98%8E-400faa27-9343-461c-ada9-24c8229763bf 脚本应以管理员身份运行, 内容如下 123456cd /d &quot;%~dp0&quot;reagentc /disablediskpart /s diskpart_script.txt &gt; diskpart_log.txtreagentc /enablereagentc /infopause diskpart_script.txt内容如下 1234567891011121314list diskREM == 需要修改为安装Windows的磁盘sel disk 0...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blog/img/avatar.png" onerror="this.onerror=null;this.src='/blog/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lattice</div><div class="author-info-description"></div><div class="site-data"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/blog/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/blog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/7att1ce"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows%E8%AE%BE%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">Windows设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.1.</span> <span class="toc-text">系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%93%9D%E7%89%99%E5%92%8C%E5%85%B6%E4%BB%96%E8%AE%BE%E5%A4%87"><span class="toc-number">1.2.</span> <span class="toc-text">蓝牙和其他设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%92%8CInternet"><span class="toc-number">1.3.</span> <span class="toc-text">网络和Internet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AA%E6%80%A7%E5%8C%96"><span class="toc-number">1.4.</span> <span class="toc-text">个性化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">1.5.</span> <span class="toc-text">应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%90%E6%88%B7"><span class="toc-number">1.6.</span> <span class="toc-text">帐户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%B6%E9%97%B4%E5%92%8C%E8%AF%AD%E8%A8%80"><span class="toc-number">1.7.</span> <span class="toc-text">时间和语言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%B8%E6%88%8F"><span class="toc-number">1.8.</span> <span class="toc-text">游戏</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%85%E5%8A%A9%E5%8A%9F%E8%83%BD"><span class="toc-number">1.9.</span> <span class="toc-text">辅助功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E7%A7%81%E5%92%8C%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-number">1.10.</span> <span class="toc-text">隐私和安全性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows%E6%9B%B4%E6%96%B0"><span class="toc-number">1.11.</span> <span class="toc-text">Windows更新</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/02/04/vps-config/" title="VPS 配置记录"><img src="https://redive.estertion.win/bang/card/021078_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="VPS 配置记录"/></a><div class="content"><a class="title" href="/blog/2026/02/04/vps-config/" title="VPS 配置记录">VPS 配置记录</a><time datetime="2026-02-04T14:52:00.000Z" title="发表于 2026-02-04 14:52:00">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/01/05/windows-auto-dev-setup/" title="Windows 10/11 自动配置开发环境"><img src="https://redive.estertion.win/bang/card/017077_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Windows 10/11 自动配置开发环境"/></a><div class="content"><a class="title" href="/blog/2026/01/05/windows-auto-dev-setup/" title="Windows 10/11 自动配置开发环境">Windows 10/11 自动配置开发环境</a><time datetime="2026-01-05T22:29:01.000Z" title="发表于 2026-01-05 22:29:01">2026-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2025/11/09/hyper-v-vgpu/" title="Hyper-V 虚拟机分配 VGPU"><img src="https://redive.estertion.win/bang/card/036009_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Hyper-V 虚拟机分配 VGPU"/></a><div class="content"><a class="title" href="/blog/2025/11/09/hyper-v-vgpu/" title="Hyper-V 虚拟机分配 VGPU">Hyper-V 虚拟机分配 VGPU</a><time datetime="2025-11-09T10:22:01.000Z" title="发表于 2025-11-09 10:22:01">2025-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2025/11/07/windows-11-after-install/" title="Windows 11 全新安装记录"><img src="https://redive.estertion.win/bang/card/005082_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Windows 11 全新安装记录"/></a><div class="content"><a class="title" href="/blog/2025/11/07/windows-11-after-install/" title="Windows 11 全新安装记录">Windows 11 全新安装记录</a><time datetime="2025-11-07T12:01:36.000Z" title="发表于 2025-11-07 12:01:36">2025-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2025/05/07/openwrt-thinkpad/" title="ThinkPad X390笔记本折腾OpenWrt记录"><img src="https://redive.estertion.win/bang/card/037010_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="ThinkPad X390笔记本折腾OpenWrt记录"/></a><div class="content"><a class="title" href="/blog/2025/05/07/openwrt-thinkpad/" title="ThinkPad X390笔记本折腾OpenWrt记录">ThinkPad X390笔记本折腾OpenWrt记录</a><time datetime="2025-05-07T14:00:00.000Z" title="发表于 2025-05-07 14:00:00">2025-05-07</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By Lattice</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blog/js/utils.js?v=5.5.4"></script><script src="/blog/js/main.js?v=5.5.4"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': '7att1ce/blog-discussion',
+      'data-repo-id': 'R_kgDOROnAFA',
+      'data-category-id': 'DIC_kwDOROnAFM4C2SDN',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

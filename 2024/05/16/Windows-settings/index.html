@@ -1,0 +1,951 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Windows 11一些设置项与注册表的关联(自用) | Lattice's Blog</title><meta name="author" content="Lattice"><meta name="copyright" content="Lattice"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="此为个人安装Windows 11后需要更改的设置(手动or通过注册表修改) 此设置仅限自用, 一些注册表对照可供参考 由于本人有非常严重的强迫症, 一些设置修改可能看起来很没有必要 借助Process Monitor进行对注册表的监测    Windows设置  系统  屏幕  显示卡  默认图形设置  可变刷新频率 关闭1reg add HKCU\Software\Microsoft\Dire">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 11一些设置项与注册表的关联(自用)">
+<meta property="og:url" content="https://7att1ce.github.io/blog/2024/05/16/Windows-settings/index.html">
+<meta property="og:site_name" content="Lattice&#39;s Blog">
+<meta property="og:description" content="此为个人安装Windows 11后需要更改的设置(手动or通过注册表修改) 此设置仅限自用, 一些注册表对照可供参考 由于本人有非常严重的强迫症, 一些设置修改可能看起来很没有必要 借助Process Monitor进行对注册表的监测    Windows设置  系统  屏幕  显示卡  默认图形设置  可变刷新频率 关闭1reg add HKCU\Software\Microsoft\Dire">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://redive.estertion.win/bang/card/002073_card_after_training.webp">
+<meta property="article:published_time" content="2024-05-16T18:09:36.000Z">
+<meta property="article:modified_time" content="2024-05-16T18:09:36.000Z">
+<meta property="article:author" content="Lattice">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="Windows Register">
+<meta property="article:tag" content="Windows Settings">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://redive.estertion.win/bang/card/002073_card_after_training.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Windows 11一些设置项与注册表的关联(自用)",
+  "url": "https://7att1ce.github.io/blog/2024/05/16/Windows-settings/",
+  "image": "https://redive.estertion.win/bang/card/002073_card_after_training.webp",
+  "datePublished": "2024-05-16T18:09:36.000Z",
+  "dateModified": "2024-05-16T18:09:36.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lattice",
+      "url": "https://7att1ce.github.io/blog"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blog/img/favicon.ico"><link rel="canonical" href="https://7att1ce.github.io/blog/2024/05/16/Windows-settings/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blog/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Windows 11一些设置项与注册表的关联(自用)',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.1"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blog/img/avatar.png" onerror="this.onerror=null;this.src='/blog/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/blog/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/blog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/blog/rss/"><i class="fa-fw fas fa-link"></i><span> 新番 rss</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/blog/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://redive.estertion.win/bang/card/002073_card_after_training.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blog/"><span class="site-name">Lattice's Blog</span></a><a class="nav-page-title" href="/blog/"><span class="site-name">Windows 11一些设置项与注册表的关联(自用)</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/blog/rss/"><i class="fa-fw fas fa-link"></i><span> 新番 rss</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/blog/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Windows 11一些设置项与注册表的关联(自用)<a class="post-edit-link" href="https://github.com/7att1ce/github-pages-source/edit/blog/source/_posts/Windows-settings.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-05-16T18:09:36.000Z" title="发表于 2024-05-16 18:09:36">2024-05-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-05-16T18:09:36.000Z" title="更新于 2024-05-16 18:09:36">2024-05-16</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blog/categories/%E6%9D%82%E9%A1%B9/">杂项</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;这是一篇发布于&quot;,&quot;messageNext&quot;:&quot;天前的文章, 部分信息可能已经过时, 请注意甄别.&quot;,&quot;postUpdate&quot;:&quot;2024-05-16 18:09:36&quot;}" hidden></div><blockquote>
+<p>此为个人安装Windows 11后需要更改的设置(手动or通过注册表修改)<br>
+此设置仅限自用, 一些注册表对照可供参考<br>
+由于本人有非常严重的强迫症, 一些设置修改可能看起来很没有必要<br>
+借助Process Monitor进行对注册表的监测</p>
+</blockquote>
+<ul>
+<li>
+<p>Windows设置</p>
+<ul>
+<li>系统
+<ul>
+<li>屏幕
+<ul>
+<li>显示卡
+<ul>
+<li>默认图形设置
+<ul>
+<li>可变刷新频率 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\DirectX\UserGpuPreferences /v DirectXUserGlobalSettings /t REG_SZ /d VRROptimizeEnable=<span class="number">0</span>; /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>通知
+<ul>
+<li>在锁屏界面上显示通知 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings /v NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications /v LockScreenToastEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>在锁屏界面上显示提醒和VoIP来电 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings /v NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>Windows功能更新后的第一小时 关闭<br>
+需要手动修改</li>
+<li>启动应用通知 打开<br>
+手动执行</li>
+<li>更新后以及登录后显示Windows欢迎体验以显示新增功能和建议内容 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SubscribedContent-<span class="number">310093</span>Enabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>建议我如何充分利用Windows并完成设置此设备 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\UserProfileEngagement /v ScoobeSystemSettingEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>当我使用Windows时获取提示和建议 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SubscribedContent-<span class="number">338389</span>Enabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>存储
+<ul>
+<li>存储感知
+<ul>
+<li>如果回收站中的文件存在超过以下时长, 请将其删除 从不<br>
+此选项不更改也无大碍, 也可在登录onedrive账号后一起更改<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy /v StoragePoliciesChanged /t REG_DWORD /d <span class="number">1</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy /v <span class="number">08</span> /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy /v <span class="number">256</span> /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>就近共享 关闭<br>
+手动执行</li>
+<li>多任务处理
+<ul>
+<li>对其窗口时, 建议可对其在窗口旁边的内容<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v SnapAssist /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>将鼠标悬停在窗口的最大化按钮上时显示贴靠布局<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v EnableSnapAssistFlyout /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>将窗口拖动到屏幕顶部时显示贴靠布局<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v EnableSnapBar /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>当我将鼠标悬停在任务栏应用, 任务视图中以及按Alt+Tab时, 显示已对其的窗口<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v EnableTaskGroups /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>当我拖动窗口时, 自动使其贴靠, 而无需一直拖动到屏幕边缘<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v DITest /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>对其或按Alt+Tab时显示应用中的标签页 不显示选项卡<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v MultiTaskingAltTabFilter /t REG_DWORD /d <span class="number">3</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>开发者选项
+<ul>
+<li>结束任务 开启<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings /v TaskbarEndTask /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示文件扩展名 开启<br>
+手动执行</li>
+<li>显示隐藏和系统文件 开启<br>
+手动执行</li>
+</ul>
+</li>
+<li>剪贴板
+<ul>
+<li>建议操作 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\SmartActionPlatform\SmartClipboard /v Disabled /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>系统组件<br>
+通过<code>get-appxpackage | select name,packagefullname</code>命令查找要卸载的包, 然后用<code>remove-appxpackage -package xxx</code>卸载</li>
+<li>可选功能<br>
+手动卸载, 下面还有更多Windows功能选项点击进行关闭</li>
+<li>系统信息
+<ul>
+<li>高级系统设置
+<ul>
+<li>远程协助 关闭<br>
+手动执行</li>
+</ul>
+</li>
+<li>BitLocker 关闭<br>
+手动执行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>蓝牙和其他设备
+<ul>
+<li>笔和Windows Ink
+<ul>
+<li>用手指书写 关闭<br>
+手动执行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>网络和Internet
+<ul>
+<li>WLAN
+<ul>
+<li>随即硬件地址 开启<br>
+手动执行</li>
+</ul>
+</li>
+<li>移动热点
+<ul>
+<li>节能 关闭<br>
+需开启移动热点才出现该选项, 可以不用实现修改, 使用时再修改即可</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>个性化<br>
+<strong>建议手动修改</strong>
+<ul>
+<li>主题 绽放(深色)
+<ul>
+<li>桌面图标设置 关闭全部图标</li>
+</ul>
+</li>
+<li>动态光效 全关, 亮度最低, 效果纯色, 关闭匹配主题色, 选择纯白</li>
+<li>锁屏界面
+<ul>
+<li>个性化锁屏界面 图片<br>
+组策略关闭后台应用后会自动变成图片选项</li>
+<li>锁屏界面状态 无<br>
+卸载不需要的内置应用后自动变成无</li>
+</ul>
+</li>
+<li>开始
+<ul>
+<li>布局 更多固定项</li>
+<li>显示最近添加的应用 关闭</li>
+<li>在&quot;开始&quot;, &quot;跳转列表&quot;和&quot;文件资源管理器&quot;中显示最近打开的项目 关闭</li>
+<li>显示有关提示, 快捷方式, 新应用的建议 关闭</li>
+<li>偶尔在&quot;开始菜单&quot;中显示与账户相关的通知 关闭<br>
+该选项需windows更新后才出现</li>
+<li>文件夹 选项全开<br>
+手动操作</li>
+</ul>
+</li>
+<li>任务栏
+<ul>
+<li>搜索 隐藏</li>
+<li>其他任务栏项全部关闭</li>
+<li>系统托盘图标全部关闭, 触摸键盘从不</li>
+<li>其他系统托盘图标所有选项全部开启</li>
+<li>任务栏对齐方式靠左</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>应用
+<ul>
+<li>安装的应用 按需卸载<br>
+手动操作</li>
+<li>高级应用设置
+<ul>
+<li>跨设备共享 关闭<br>
+手动操作</li>
+<li>存档应用 关闭<br>
+手动操作</li>
+</ul>
+</li>
+<li>离线地图
+<ul>
+<li>插入和打开时自动更新Wi-Fi<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SYSTEM\Maps /v AutoUpdateEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>启动 按需关闭<br>
+手动操作</li>
+</ul>
+</li>
+<li>帐户
+<ul>
+<li>登录选项
+<ul>
+<li>你希望Windows在你离开电脑多久后要求你重新登录？ 每次<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Control Panel\Desktop&quot; /v DelayLockInterval /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath0 /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath1 /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath2 /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath3 /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath4 /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath0 /t REG_SZ /d C:\Windows\web\wallpaper\Windows\img19.jpg /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath1 /t REG_SZ /d c:\windows\web\wallpaper\windows\img0.jpg /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath2 /t REG_SZ /d c:\windows\web\wallpaper\themea\img20.jpg /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath3 /t REG_SZ /d c:\windows\web\wallpaper\themeb\img24.jpg /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Wallpapers /v BackgroundHistoryPath4 /t REG_SZ /d c:\windows\web\wallpaper\themec\img28.jpg /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>使用我的登录信息在更新后自动完成设置 关闭<br>
+手动修改</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>时间和语言
+<ul>
+<li>日期和时间
+<ul>
+<li>时区 (UTC+8)北京, 重庆, 香港特别行政区, 乌鲁木齐<br>
+手动修改</li>
+</ul>
+</li>
+<li>语言和区域
+<ul>
+<li>选项
+<ul>
+<li>微软拼音
+<ul>
+<li>常规
+<ul>
+<li>选择输入法默认模式 英语<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v &quot;Default <span class="built_in">Mode</span>&quot; /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>按键
+<ul>
+<li>中/英文模式切换 只勾选Ctrl+空格键<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v &quot;English Switch Key&quot; /t REG_DWORD /d <span class="number">2</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>中/英文标点切换 无<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v EnableChineseEnglishPunctuationSwitch /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>翻页按键 全部取消勾选<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\CandidateWindow\CHS\<span class="number">1</span> /v CustomizedPagingKey /t REG_DWORD /d <span class="number">4095</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>简体/繁体中文输入切换 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v EnableSimplifiedTraditionalOutputSwitch /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>词库和自学习
+<ul>
+<li>尝试必应的文本建议 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\IME\Pinyin\Enable Cloud Candidate&quot; /v Value /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v &quot;Enable Cloud Candidate&quot; /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>专业词典 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v DomainType /t REG_QWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v EnableDomainType /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>高级
+<ul>
+<li>人名输入 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v EnablePeopleName /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>U模式输入 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v EnableUMode /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>V模式输入 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\InputMethod\Settings\CHS /v EnableVMode /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>输入
+<ul>
+<li>在我输入内容时播放按键音 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\TabletTip\<span class="number">1</span>.<span class="number">7</span> /v EnableKeyAudioFeedback /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>每句话的首字母大写 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\TabletTip\<span class="number">1</span>.<span class="number">7</span> /v EnableAutoShiftEngage /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示语音输入麦克风按钮 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\input\Settings /v IsVoiceTypingKeyEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示触摸键盘 从不<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\TabletTip\<span class="number">1</span>.<span class="number">7</span> /v TouchKeyboardTapInvoke /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>键入见解 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\input\Settings /v InsightsEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\input\TypingInsights /v Insights /t REG_BINARY /d <span class="number">02000000071</span>DE8C131CC8360A3D6D9C1330A686B165ABA2E235F5A5C /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>游戏
+<ul>
+<li>Game Bar
+<ul>
+<li>允许控制器打开Game Bar 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\GameBar /v UseNexusForGameBarEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>摄像<br>
+可以不改, 因为xbox相关app已卸载
+<ul>
+<li>最大录制长度 4小时<br>
+手动修改</li>
+<li>录制游戏时录制音频 关闭<br>
+手动修改</li>
+<li>视频帧速率 60fps<br>
+手动修改</li>
+<li>录制游戏时录制鼠标光标 关闭<br>
+手动修改</li>
+</ul>
+</li>
+<li>游戏模式
+<ul>
+<li>游戏模式 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\GameBar /v AutoGameModeEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>辅助功能
+<ul>
+<li>鼠标指针与触控
+<ul>
+<li>使圆圈更深, 更大 开启<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Control Panel\Cursors&quot; /v ContactVisualization /t REG_DWORD /d <span class="number">2</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>讲述人
+<ul>
+<li>&quot;讲述人&quot;的键盘快捷方式 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v WinEnterLaunchEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>&quot;讲述人&quot;启动时显示&quot;讲述人&quot;主页 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NarratorHome /v AutoStart /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>选择语音
+<ul>
+<li>速度 0<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v SpeechSpeed /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>音调 0<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v SpeechPitch /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>音量 0<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v SpeechVolume /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>在&quot;讲述人&quot;说话时调低其他应用的音量 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v DuckAudio /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>详细信息级别 纯文本<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v UserVerbosityLevel /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在读取标点符号时稍微暂停 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v IntonationPause /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>按钮和控件的上下文级别 无上下文<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v ContextVerbosityLevelV2 /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+<ul>
+<li>阅读有关如何与按钮和其他控件交互的提示 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v ReadHints /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>告诉我为什么无法执行操作 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v ErrorNotificationType /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>当我键入时让讲述人报出
+<ul>
+<li>字母, 数字和标点符号 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v EchoChars /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>字 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v EchoWords /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>切换键, 如Caps Lock和Num Lock 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v EchoToggleKeys /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>&quot;讲述人&quot;键 Insert<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v NarratorModifiers /t REG_DWORD /d <span class="number">2</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>显示&quot;讲述人&quot;光标 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v NarratorCursorHighlight /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>同步&quot;讲述人&quot;光标和系统焦点 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator /v CoupleNarratorCursorKeyboard /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>启用讲述人扩展 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v ScriptingEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在&quot;讲述人&quot;启动时查找和下载新的扩展 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v CheckForScriptsEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>获取图像描述, 页面标题和热门链接 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Narrator\NoRoam /v OnlineServicesEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>键盘
+<ul>
+<li>粘滞键
+<ul>
+<li>粘滞键的键盘快捷方式 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\StickyKeys&quot; /v Flags /t REG_SZ /d <span class="number">378</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>连续按两次时锁定快捷键 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\StickyKeys&quot; /v Flags /t REG_SZ /d <span class="number">378</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>筛选键
+<ul>
+<li>筛选键的快捷方式 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\Keyboard Response&quot; /v Flags /t REG_SZ /d <span class="number">122</span> /f</span><br><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\Keyboard Response&quot; /v DelayBeforeAcceptance /t REG_SZ /d <span class="number">0</span> /f</span><br><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\Keyboard Response&quot; /v AutoRepeatDelay /t REG_SZ /d <span class="number">0</span> /f</span><br><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\Keyboard Response&quot; /v AutoRepeatRate /t REG_SZ /d <span class="number">0</span> /f</span><br><span class="line">reg add &quot;HKCU\Control Panel\Accessibility\Keyboard Response&quot; /v BounceTime /t REG_SZ /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>隐私和安全性
+<ul>
+<li>设备加密
+<ul>
+<li>设备加密 关<br>
+手动操作</li>
+</ul>
+</li>
+<li>常规
+<ul>
+<li>允许网站通过访问我的语言列表来显示本地内容 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add &quot;HKCU\Control Panel\International\User Profile&quot; /v HttpAcceptLanguageOptOut /t REG_DWORD /d <span class="number">1</span> /f</span><br><span class="line">reg delete &quot;HKCU\Software\Microsoft\Internet Explorer\International&quot; /v AcceptLanguage /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>允许Windows跟踪应用启动, 以改进&quot;开始&quot;和搜索内容 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v Start_TrackProgs /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg delete &quot;HKCU\Software\Microsoft\Internet Explorer&quot; /v TypedURLs /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer /v TypedPaths /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer /v RunMRU /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>在设置中为我显示建议内容 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SubscribedContent-<span class="number">338393</span>Enabled /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SubscribedContent-<span class="number">353694</span>Enabled /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SubscribedContent-<span class="number">353696</span>Enabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>墨迹书写和键入个性化
+<ul>
+<li>自定义墨迹书写和键入词典<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\InkingAndTypingPersonalization /v Value /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Personalization\Settings /v AcceptedPrivacyPolicy /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\Personalization\Settings /v AcceptedPrivacyPolicy /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\InputPersonalization /v RestrictImplicitTextCollection /t REG_DWORD /d <span class="number">1</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\InputPersonalization /v RestrictImplicitInkCollection /t REG_DWORD /d <span class="number">1</span> /f</span><br><span class="line">reg add HKCU\Software\Microsoft\InputPersonalization /v TrainedDataStore\HarvestContacts /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>自定义词典
+<ul>
+<li>清除你的自定义词典 点击<br>
+手动操作</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>诊断和反馈
+<ul>
+<li>删除诊断数据 点击删除<br>
+手动操作</li>
+<li>反馈频率 从不<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Siuf\Rules /v NumberOfSIUFInPeriod /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg delete HKCU\Software\Microsoft\Siuf\Rules /v PeriodInNanoSeconds /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>活动历史记录
+<ul>
+<li>在此设备上存储我的活动历史记录 关闭<br>
+手动操作</li>
+<li>清除此账户的活动历史记录 清除历史记录<br>
+手动操作</li>
+</ul>
+</li>
+<li>搜索权限
+<ul>
+<li>安全搜索 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings /v SafeSearchMode /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>云内容搜索
+<ul>
+<li>Microsoft账户 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings /v IsMSACloudSearchEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>工作或学校账户 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings /v IsAADCloudSearchEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>历史记录
+<ul>
+<li>此设备上的搜索历史记录 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings /v IsDeviceSearchHistoryEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>清除设备搜索历史纪录 点击<br>
+手动操作</li>
+</ul>
+</li>
+<li>更多设置
+<ul>
+<li>显示搜索要点 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings /v IsDynamicSearchBoxEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>位置
+<ul>
+<li>允许位置覆盖 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CPSS\Store\UserLocationOverridePrivacySetting /v Value /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>语音激活
+<ul>
+<li>允许应用在设备锁定时使用语音激活 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps /v AgentActivationOnLockScreenEnabled /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>允许应用访问语音激活服务 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Speech_OneCore\Settings\VoiceActivation\UserPreferenceForAllApps /v AgentActivationEnabled /t REG_DWORD /d <span class="number">0</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>通知
+<ul>
+<li>让应用访问通知 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>通知访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userNotificationListener /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>帐户信息
+<ul>
+<li>允许应用访问你的帐户信息 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>帐户信息访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userAccountInformation /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>联系人
+<ul>
+<li>允许应用访问你的联系人 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\contacts /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>联系人访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\contacts /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>日历
+<ul>
+<li>允许应用访问你的日历 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appointments /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>日历访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appointments /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>电话呼叫
+<ul>
+<li>允许应用拨打电话 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCall /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>电话呼叫访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCall /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>通话记录
+<ul>
+<li>允许应用访问你的呼叫历史记录 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCallHistory /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>呼叫历史记录访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCallHistory /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>电子邮件
+<ul>
+<li>允许应用访问你的电子邮件 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\email /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>电子邮件访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\email /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>任务
+<ul>
+<li>允许应用访问你的任务 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userDataTasks /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>任务访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userDataTasks /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>消息
+<ul>
+<li>允许应用读取短信 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\chat /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>短信访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\chat /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>无线收发器
+<ul>
+<li>让应用控制设备无线电收发器 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\radios /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>收音机空间访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\radios /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>其他设备
+<ul>
+<li>与未配对设备通信 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\bluetoothSync /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>应用诊断
+<ul>
+<li>允许应用访问与其他应用有关的诊断信息 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>应用诊断访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>文档
+<ul>
+<li>让应用访问文档库 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\documentsLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>文档库访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\documentsLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>下载文件夹
+<ul>
+<li>让应用访问下载文件夹 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\downloadsFolder /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>下载文件夹访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\downloadsFolder /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>音乐库
+<ul>
+<li>允许应用访问你的音乐库 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\musicLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>允许访问此设备上的音乐库 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\musicLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>图片
+<ul>
+<li>让应用访问图片库 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\picturesLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>图片库访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\picturesLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>视频
+<ul>
+<li>让应用访问视频库 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\videosLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>视频库访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\videosLibrary /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>文件系统
+<ul>
+<li>让应用访问文件系统 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\broadFileSystemAccess /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>文件系统访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\broadFileSystemAccess /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>屏幕截图边框
+<ul>
+<li>让桌面应用关闭屏幕截图边框 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureWithoutBorder\NonPackaged /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>让应用关闭屏幕截图边框 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureWithoutBorder /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>屏幕截图边框设置访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureWithoutBorder /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li>屏幕截图和应用
+<ul>
+<li>让桌面应用程序对各种窗口或显示器进行截图 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureProgrammatic\NonPackaged /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>让应用对各种窗口和显示器进行屏幕截图 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureProgrammatic /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>屏幕截图访问权限 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\graphicsCaptureProgrammatic /v Value /t REG_SZ /d Deny /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Windows 更新
+<ul>
+<li>高级选项
+<ul>
+<li>接收其他Microsoft产品的更新 打开<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings /v AllowMUUpdateService /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>需要重新启动才能完成更新时通知我 打开<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg add HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings /v RestartNotificationsAllowed2 /t REG_DWORD /d <span class="number">1</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+<li>传递优化
+<ul>
+<li>允许从其他电脑下载 关闭<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">reg add HKU\S-<span class="number">1</span>-<span class="number">5</span>-<span class="number">20</span>\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings /v DownloadMode /t REG_DWORD /d <span class="number">0</span> /f</span><br><span class="line">reg add HKU\S-<span class="number">1</span>-<span class="number">5</span>-<span class="number">20</span>\Software\Microsoft\Windows\CurrentVersion\DeliveryOptimization\Settings /v DownloadModeProvider /t REG_DWORD /d <span class="number">8</span> /f</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>控制面板</p>
+<ul>
+<li>Internet选项</li>
+<li>安全和维护</li>
+<li>电源选项</li>
+<li>文件资源管理器选项</li>
+</ul>
+</li>
+<li>
+<p>组策略</p>
+</li>
+<li>
+<p>Microsoft商店</p>
+</li>
+<li>
+<p>Microsoft Edge</p>
+</li>
+<li>
+<p>AMD Software</p>
+</li>
+<li>
+<p>Nvidia控制面板</p>
+</li>
+<li>
+<p>Realtek Audio Console</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://7att1ce.github.io/blog">Lattice</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://7att1ce.github.io/blog/2024/05/16/Windows-settings/">https://7att1ce.github.io/blog/2024/05/16/Windows-settings/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://7att1ce.github.io/blog" target="_blank">Lattice's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/Windows/">Windows</a><a class="post-meta__tags" href="/blog/tags/Windows-Settings/">Windows Settings</a><a class="post-meta__tags" href="/blog/tags/Windows-Register/">Windows Register</a></div><div class="post-share"><div class="social-share" data-image="https://redive.estertion.win/bang/card/002073_card_after_training.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blog/2024/08/28/fix-windows10-update/" title="修复Win10更新KB5034441的0x80070643错误"><img class="cover" src="https://redive.estertion.win/bang/card/008073_card_after_training.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">修复Win10更新KB5034441的0x80070643错误</div></div><div class="info-2"><div class="info-item-1">原理是增加WinRE分区大小 参考https://support.microsoft.com/zh-cn/topic/kb5028997-%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F%E4%BB%A5%E5%AE%89%E8%A3%85-winre-%E6%9B%B4%E6%96%B0%E7%9A%84%E8%AF%B4%E6%98%8E-400faa27-9343-461c-ada9-24c8229763bf 脚本应以管理员身份运行, 内容如下 123456cd /d &quot;%~dp0&quot;reagentc /disablediskpart /s diskpart_script.txt &gt; diskpart_log.txtreagentc /enablereagentc /infopause diskpart_script.txt内容如下 1234567891011121314list diskREM == 需要修改为安装Windows的磁盘sel disk 0...</div></div></div></a><a class="pagination-related" href="/blog/2021/12/02/010editor/" title="macOS下010editor过期处理"><img class="cover" src="https://redive.estertion.win/bang/card/023080_card_after_training.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">macOS下010editor过期处理</div></div><div class="info-2"><div class="info-item-1">macOS下：  /Users/xxx/.config/SweetScape/010\ Editor.ini为注册相关文件 /Users/xxx/Library/Application\ Support/SweetScape/010\ Editor/010Editor120.cfg为配置文件  删掉上述两个文件会恢复到原来的状态, 不过文件历史记录和插件安装记录都会丢失 参考链接: https://blog.csdn.net/hejinjing_tom_com/article/details/90765196 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blog/2021/10/11/DHCP_Status_Coexist/" title="Windows同一网卡中DHCP与静态IP共存的方法"><img class="cover" src="https://redive.estertion.win/bang/card/005081_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2021-10-11</div><div class="info-item-2">Windows同一网卡中DHCP与静态IP共存的方法</div></div><div class="info-2"><div class="info-item-1">系统要求 Windows10 1703及以上版本(网络上查的, 自己没有验证) 原理 1703 创造者更新里微软悄悄地在netsh set interface命令里加了一个属性dhcpstaticipcoexistence, 把这个属性设为enabled就可以在一张网卡上同时配置一个 DHCP 的 IP 和多个静态 IP. 而在以往的 Windows 里情况是: 要么只用一个 DHCP 的 IP, 要么所有的多个 IP 都必须是静态的. 简单来讲就是利用netsh命令来实现的 具体方法 1234567891011# 命令须在管理员权限下运行netsh int ipv4 set interface &quot;以太网&quot; dhcpstaticipcoexistence=enable # 启用DHCP与静态IP共存, 看选项应该能理解意思: dhcp static ip coexistence# 具体修改时可能要修改网络连接名称, 即&quot;以太网&quot;netsh int ipv4 add address [name=]&quot;以太网&quot; [addr=]...</div></div></div></a><a class="pagination-related" href="/blog/2025/11/07/windows-11-after-install/" title="Windows 11 全新安装记录"><img class="cover" src="https://redive.estertion.win/bang/card/005082_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-07</div><div class="info-item-2">Windows 11 全新安装记录</div></div><div class="info-2"><div class="info-item-1"> 适用于 Windows 11 25H2, 其他版本未作测试, 并长期不定期更新. 测试平台: ASUS TUFGaming A16 2024 FA607PV, 其他平台可能存在差异.  具体安装过程  访问 uupdump, 选择 Windows 11 最新版本创建下载包, 注意选择 下载, 添加虚拟升级版本并转换为 ISO 镜像文件. 解压下载包, 修改 ConvertConfig.ini 中 CustomList   =0 为 CustomList   =1; 修改 CustomAppsList.txt 中去掉 Microsoft.WindowsNotepad_8wekyb3d8bbwe, Microsoft.WindowsCalculator_8wekyb3d8bbwe, Microsoft.ScreenSketch_8wekyb3d8bbwe, 以及 标题为### Media Codecs / Client non-N editions, Team edition 下的所有列表项的 # 注释, 然后以管理员身份运行 uup_download_windows.cmd, 等...</div></div></div></a><a class="pagination-related" href="/blog/2024/12/06/self-windows-settings/" title="个人Windows自定义设置"><img class="cover" src="https://redive.estertion.win/bang/card/003070_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2025-11-07</div><div class="info-item-2">个人Windows自定义设置</div></div><div class="info-2"><div class="info-item-1">本文已过期, 未来会被删除, 请参考新发布的内容  个人Windows设置方案, 仅作备份用, 不具有参考价值  Windows设置 系统  屏幕  显示卡  窗口化游戏优化: 关 高级图形设置  可变刷新频率: 关       通知  通知  在锁屏界面上显示通知: 关 在锁屏界面上显示提醒和VoIP来电: 关   自动启用请勿打扰  Windows功能更新后的第一小时: 关   其他设置: 全部关闭   电源和电池  屏幕, 睡眠和休眠超时: 全部从不 盖子, 电源和睡眠按钮控件: 全部不执行任何操作   存储  存储感知  配置清理计划  如果回收站中的文件存在超过以下时长，请将其删除: 从不       多任务处理  贴靠窗口  将鼠标悬停在窗口的最大化按钮上时显示贴靠布局: 开 将窗口拖动到屏幕顶部时显示贴靠按钮: 开   对齐或按Alt+Tab时显示应用中的标签页: 不显示选项卡   开发者选项  结束任务: 开 文件资源管理器  显示文件扩展名: 开 显示隐藏和系统文件: 开     系统组件: 需要Remove-Appxpackage命令卸载 可选功能: 删除不需...</div></div></div></a><a class="pagination-related" href="/blog/2024/12/01/create-windows-pe/" title="在U盘创建Windows PE"><img class="cover" src="https://redive.estertion.win/bang/card/021078_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2025-11-08</div><div class="info-item-2">在U盘创建Windows PE</div></div><div class="info-2"><div class="info-item-1"> 参考链接: https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe-create-usb-bootable-drive?view=windows-11 https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe-adding-powershell-support-to-windows-pe?view=windows-11 https://learn.microsoft.com/zh-cn/windows-hardware/manufacture/desktop/winpe–use-a-single-usb-key-for-winpe-and-a-wim-file—wim?view=windows-11#option-1-create-a-multiple-partition-usb-drive  准备工作  下载 Windows ADK 10.1.26100.2454 (2024 年 12...</div></div></div></a><a class="pagination-related" href="/blog/2026/01/05/windows-auto-dev-setup/" title="Windows 10&#x2F;11 自动配置开发环境"><img class="cover" src="https://redive.estertion.win/bang/card/017077_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-01-09</div><div class="info-item-2">Windows 10&#x2F;11 自动配置开发环境</div></div><div class="info-2"><div class="info-item-1">在 Windows 10/11 上自动配置简单的开发环境 通过下载 standalone build 并写入环境变量实现 目前配置的环境:  C/C++: https://winlibs.com/ Python: https://docs.astral.sh/uv/ Git: https://git-scm.com/install/windows  脚本如下 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889909192939495969798991001011021031041051061071081091101111121131141151161171181191201211221231241251261271281291301311321331341351361371381391401411...</div></div></div></a><a class="pagination-related" href="/blog/2024/08/28/fix-windows10-update/" title="修复Win10更新KB5034441的0x80070643错误"><img class="cover" src="https://redive.estertion.win/bang/card/008073_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2024-08-28</div><div class="info-item-2">修复Win10更新KB5034441的0x80070643错误</div></div><div class="info-2"><div class="info-item-1">原理是增加WinRE分区大小 参考https://support.microsoft.com/zh-cn/topic/kb5028997-%E6%89%8B%E5%8A%A8%E8%B0%83%E6%95%B4%E5%88%86%E5%8C%BA%E5%A4%A7%E5%B0%8F%E4%BB%A5%E5%AE%89%E8%A3%85-winre-%E6%9B%B4%E6%96%B0%E7%9A%84%E8%AF%B4%E6%98%8E-400faa27-9343-461c-ada9-24c8229763bf 脚本应以管理员身份运行, 内容如下 123456cd /d &quot;%~dp0&quot;reagentc /disablediskpart /s diskpart_script.txt &gt; diskpart_log.txtreagentc /enablereagentc /infopause diskpart_script.txt内容如下 1234567891011121314list diskREM == 需要修改为安装Windows的磁盘sel disk 0...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blog/img/avatar.png" onerror="this.onerror=null;this.src='/blog/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lattice</div><div class="author-info-description"></div><div class="site-data"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">15</div></a><a href="/blog/tags/"><div class="headline">标签</div><div class="length-num">17</div></a><a href="/blog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/7att1ce"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my blog.</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/02/04/vps-config/" title="VPS 配置记录"><img src="https://redive.estertion.win/bang/card/021078_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="VPS 配置记录"/></a><div class="content"><a class="title" href="/blog/2026/02/04/vps-config/" title="VPS 配置记录">VPS 配置记录</a><time datetime="2026-02-04T14:52:00.000Z" title="发表于 2026-02-04 14:52:00">2026-02-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/01/05/windows-auto-dev-setup/" title="Windows 10/11 自动配置开发环境"><img src="https://redive.estertion.win/bang/card/017077_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Windows 10/11 自动配置开发环境"/></a><div class="content"><a class="title" href="/blog/2026/01/05/windows-auto-dev-setup/" title="Windows 10/11 自动配置开发环境">Windows 10/11 自动配置开发环境</a><time datetime="2026-01-05T22:29:01.000Z" title="发表于 2026-01-05 22:29:01">2026-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2025/11/09/hyper-v-vgpu/" title="Hyper-V 虚拟机分配 VGPU"><img src="https://redive.estertion.win/bang/card/036009_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Hyper-V 虚拟机分配 VGPU"/></a><div class="content"><a class="title" href="/blog/2025/11/09/hyper-v-vgpu/" title="Hyper-V 虚拟机分配 VGPU">Hyper-V 虚拟机分配 VGPU</a><time datetime="2025-11-09T10:22:01.000Z" title="发表于 2025-11-09 10:22:01">2025-11-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2025/11/07/windows-11-after-install/" title="Windows 11 全新安装记录"><img src="https://redive.estertion.win/bang/card/005082_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Windows 11 全新安装记录"/></a><div class="content"><a class="title" href="/blog/2025/11/07/windows-11-after-install/" title="Windows 11 全新安装记录">Windows 11 全新安装记录</a><time datetime="2025-11-07T12:01:36.000Z" title="发表于 2025-11-07 12:01:36">2025-11-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2025/05/07/openwrt-thinkpad/" title="ThinkPad X390笔记本折腾OpenWrt记录"><img src="https://redive.estertion.win/bang/card/037010_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="ThinkPad X390笔记本折腾OpenWrt记录"/></a><div class="content"><a class="title" href="/blog/2025/05/07/openwrt-thinkpad/" title="ThinkPad X390笔记本折腾OpenWrt记录">ThinkPad X390笔记本折腾OpenWrt记录</a><time datetime="2025-05-07T14:00:00.000Z" title="发表于 2025-05-07 14:00:00">2025-05-07</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By Lattice</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blog/js/utils.js?v=5.5.4"></script><script src="/blog/js/main.js?v=5.5.4"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': '7att1ce/blog-discussion',
+      'data-repo-id': 'R_kgDOROnAFA',
+      'data-category-id': 'DIC_kwDOROnAFM4C2SDN',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
