@@ -1,0 +1,550 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Arch Linux 安装记录 | Lattice's Blog</title><meta name="author" content="Lattice"><meta name="copyright" content="Lattice"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文为针对特定设备的 Arch Linux 安装记录, 不具有普适性, 仅供参考 本文内容持续保持更新 (或许?)  硬件配置 型号: 华硕天选 5 pro 锐龙版 (对应国外型号: ASUS TUFGaming A16 2024 FA607PV) CPU: AMD Ryzen 9 7940HX with Radeon Graphics 内存: SAMSUNG DDR5 5200MHZ 32GB">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arch Linux 安装记录">
+<meta property="og:url" content="https://7att1ce.github.io/blog/2026/05/29/arch-linux-installation-guide/index.html">
+<meta property="og:site_name" content="Lattice&#39;s Blog">
+<meta property="og:description" content="本文为针对特定设备的 Arch Linux 安装记录, 不具有普适性, 仅供参考 本文内容持续保持更新 (或许?)  硬件配置 型号: 华硕天选 5 pro 锐龙版 (对应国外型号: ASUS TUFGaming A16 2024 FA607PV) CPU: AMD Ryzen 9 7940HX with Radeon Graphics 内存: SAMSUNG DDR5 5200MHZ 32GB">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://redive.estertion.win/bang/card/019075_card_after_training.webp">
+<meta property="article:published_time" content="2026-05-29T20:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-28T16:00:00.000Z">
+<meta property="article:author" content="Lattice">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://redive.estertion.win/bang/card/019075_card_after_training.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Arch Linux 安装记录",
+  "url": "https://7att1ce.github.io/blog/2026/05/29/arch-linux-installation-guide/",
+  "image": "https://redive.estertion.win/bang/card/019075_card_after_training.webp",
+  "datePublished": "2026-05-29T20:00:00.000Z",
+  "dateModified": "2026-06-28T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Lattice",
+      "url": "https://7att1ce.github.io/blog"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/blog/img/favicon.ico"><link rel="canonical" href="https://7att1ce.github.io/blog/2026/05/29/arch-linux-installation-guide/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/blog/css/index.css?v=5.5.5"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          const mediaQueryDark = window.matchMedia('(prefers-color-scheme: dark)')
+          const mediaQueryLight = window.matchMedia('(prefers-color-scheme: light)')
+
+          if (theme === undefined) {
+            if (mediaQueryLight.matches) activateLightMode()
+            else if (mediaQueryDark.matches) activateDarkMode()
+            else {
+              const hour = new Date().getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            mediaQueryDark.addEventListener('change', () => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else {
+            theme === 'light' ? activateLightMode() : activateDarkMode()
+          }
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/blog/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":true,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Arch Linux 安装记录',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 8.1.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/blog/img/avatar.png" onerror="this.onerror=null;this.src='/blog/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/blog/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/blog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/blog/rss/"><i class="fa-fw fas fa-link"></i><span> 新番 rss</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/blog/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://redive.estertion.win/bang/card/019075_card_after_training.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/blog/"><span class="site-name">Lattice's Blog</span></a><a class="nav-page-title" href="/blog/"><span class="site-name">Arch Linux 安装记录</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/blog/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/blog/rss/"><i class="fa-fw fas fa-link"></i><span> 新番 rss</span></a></div><div class="menus_item"><a class="site-page" href="/blog/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/blog/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/blog/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/blog/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/blog/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Arch Linux 安装记录<a class="post-edit-link" href="https://github.com/7att1ce/github-pages-source/edit/blog/source/_posts/arch-linux-installation-guide.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-05-29T20:00:00.000Z" title="发表于 2026-05-29 20:00:00">2026-05-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-28T16:00:00.000Z" title="更新于 2026-06-28 16:00:00">2026-06-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/blog/categories/%E6%9D%82%E9%A1%B9/">杂项</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><div id="post-outdate-notice" data="{&quot;limitDay&quot;:365,&quot;messagePrev&quot;:&quot;这是一篇发布于&quot;,&quot;messageNext&quot;:&quot;天前的文章, 部分信息可能已经过时, 请注意甄别.&quot;,&quot;postUpdate&quot;:&quot;2026-06-28 16:00:00&quot;}" hidden></div><blockquote>
+<p>本文为针对特定设备的 Arch Linux 安装记录, 不具有普适性, 仅供参考<br><br>
+本文内容持续保持更新 (或许?)</p>
+</blockquote>
+<h2 id="硬件配置">硬件配置</h2>
+<p>型号: 华硕天选 5 pro 锐龙版 (对应国外型号: ASUS TUFGaming A16 2024 FA607PV)<br><br>
+CPU: AMD Ryzen 9 7940HX with Radeon Graphics<br><br>
+内存: SAMSUNG DDR5 5200MHZ 32GB (出厂 16GB, 后加装 16GB)<br><br>
+硬盘: WD PC SN560 SDDPNQE-1T00-1102 1TB, KIOXIA-EXCERIA PLUS G3 SSD 1TB (后加装)<br><br>
+GPU: AMD Radeon™ 610M, NVIDIA GeForce RTX 4060 Laptop GPU</p>
+<h2 id="安装步骤">安装步骤</h2>
+<h3 id="预安装">预安装</h3>
+<h4 id="制作-USB-启动盘并启动-live-环境">制作 USB 启动盘并启动 live 环境</h4>
+<p>下载 Arch Linux ISO, 并进行 SHA256 校验, 然后使用 Rufus 写入到 U 盘 (默认写入选项即可, 以 ISO 模式写入)<br><br>
+进入电脑 UEFI (BIOS) 页面, 关闭安全启动和快速启动, 显示模式设置为动态 (arch iso 不带 nvidia-open 驱动)<br><br>
+电脑启动到 U 盘的 arch live 环境</p>
+<h4 id="连接到互联网">连接到互联网</h4>
+<p>这里有线网络会尝试 DHCP 连接网络, 可跳过<br></p>
+<blockquote>
+<p>若连接到无线网络, 则使用 <code>iwctl</code> 连接, 步骤如下:<br><br>
+查看无线网卡设备并确保已开启</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iwctl device list</span><br></pre></td></tr></table></figure>
+<p>扫描并查看可用网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">iwctl station &lt;device&gt; scan</span><br><span class="line">iwctl station &lt;device&gt; get-networks</span><br></pre></td></tr></table></figure>
+<p>连接网络</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iwctl station &lt;device&gt; connect &lt;SSID&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>检查互联网连接</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ping ping.archlinux.org</span><br></pre></td></tr></table></figure>
+<h4 id="更新系统时钟">更新系统时钟</h4>
+<p>确保系统时钟同步</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">timedatectl</span><br></pre></td></tr></table></figure>
+<h4 id="磁盘分区">磁盘分区</h4>
+<p>对于不同类型的设备, 设备路径和分区路径有所不同:</p>
+<ul>
+<li>m.2 接口的 nvme 协议设备: <code>/dev/nvme1n1</code>
+<ul>
+<li>boot partition: <code>/dev/nvme1n1p1</code></li>
+<li>swap partition: <code>/dev/nvme1n1p2</code></li>
+<li>root partition: <code>/dev/nvme1n1p3</code></li>
+</ul>
+</li>
+<li>sata 接口或 usb 接口设备: <code>/dev/sda</code>
+<ul>
+<li>boot partition: <code>/dev/sda1</code></li>
+<li>swap partition: <code>/dev/sda2</code></li>
+<li>root partition: <code>/dev/sda3</code></li>
+</ul>
+</li>
+</ul>
+<p>查看要安装系统的磁盘设备</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk -l | less</span><br></pre></td></tr></table></figure>
+<p>抹除磁盘</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wipefs --all &lt;disk&gt;</span><br></pre></td></tr></table></figure>
+<p>交互模式进行硬盘分区</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cfdisk &lt;disk&gt;</span><br></pre></td></tr></table></figure>
+<p>分区类型选 <code>GPT</code><br><br>
+分区方案:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Mount Point</th>
+<th style="text-align:center">Partition type GUID</th>
+<th style="text-align:center">Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">/boot</td>
+<td style="text-align:center"><code>C12A7328-F81F-11D2-BA4B-00A0C93EC93B</code>: EFI System</td>
+<td style="text-align:center">1GB</td>
+</tr>
+<tr>
+<td style="text-align:center">[SWAP]</td>
+<td style="text-align:center"><code>0657FD6D-A4AB-43C4-84E5-0933C84B4F4F</code>: Linux swap</td>
+<td style="text-align:center">32GB</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center"><code>4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709</code>: Linux root (x86-64)</td>
+<td style="text-align:center">Remainder</td>
+</tr>
+</tbody>
+</table>
+<p>parted 命令硬盘分区分区</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">parted &lt;disk&gt; --script \</span><br><span class="line">    mklabel gpt \</span><br><span class="line">    mkpart &quot;\&quot;EFI System\&quot;&quot; fat32 1MiB 1025MiB \</span><br><span class="line">    set 1 esp on \</span><br><span class="line">    mkpart &quot;\&quot;Linux swap\&quot;&quot; linux-swap 1025MiB 33793MiB \</span><br><span class="line">    mkpart &quot;\&quot;Linux root (x86-64)\&quot;&quot; ext4 33793MiB 100% \</span><br><span class="line">    type 3 4F68BCE3-E8CD-4DB1-96E7-FBCAF984B709</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">让内核识别到硬盘分区更改</span></span><br><span class="line">partprobe &lt;disk&gt;</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">若写在脚本里建议等待一段时间</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">sleep</span> 2</span></span><br></pre></td></tr></table></figure>
+<p>查看分区更改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk -l &lt;disk&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="格式化分区">格式化分区</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkfs.fat -F 32 &lt;boot-partition&gt;</span><br><span class="line">mkswap &lt;swap-partition&gt;</span><br><span class="line">mkfs.ext4 &lt;root-partition&gt;</span><br></pre></td></tr></table></figure>
+<p>检查格式化分区</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk -f &lt;disk&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="挂载文件系统">挂载文件系统</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount &lt;root-partition&gt; /mnt</span><br><span class="line">mount --mkdir &lt;boot-partition&gt; /mnt/boot</span><br><span class="line">swapon &lt;swap-partition&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="安装">安装</h3>
+<h4 id="选择镜像">选择镜像</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cp /etc/pacman.d/mirrorlist /etc/pacman.d/mirrorlist.bak</span><br><span class="line">curl -L &#x27;https://archlinux.org/mirrorlist/?country=CN&amp;protocol=https&#x27; -o /etc/pacman.d/mirrorlist</span><br><span class="line">sed -i &#x27;s/^#Server/Server/&#x27; /etc/pacman.d/mirrorlist</span><br></pre></td></tr></table></figure>
+<h4 id="安装必要软件包">安装必要软件包</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">pacstrap -K /mnt \</span><br><span class="line">    base base-devel \</span><br><span class="line">    linux linux-firmware \</span><br><span class="line">    amd-ucode \</span><br><span class="line">    networkmanager modemmanager usb_modeswitch \</span><br><span class="line">    nano vi vim \</span><br><span class="line">    man-db man-pages texinfo \</span><br><span class="line">    sudo bluez bluez-utils wget git openssh</span><br></pre></td></tr></table></figure>
+<p>安装内容详解:</p>
+<ul>
+<li>base, base-devel, linux, linux-firmware: 基础包, 包含基础内核, 固件, 应用程序. base-devel 是后面安装 nvidia-laptop-power-cfg 中 makepkg 的依赖</li>
+<li>amd-ucode: AMD CPU 微码</li>
+<li>networkmanager, modemmanager, usb_modeswitch: 网络管理, 后两者为 PPPoE 上网需要 (可选)</li>
+<li>nano, vi, vim: 文本编辑器, 其中 vi 是 visudo 的默认编辑器, 若不选择安装则须额外配置全局默认编辑器</li>
+<li>man-db, man-pages, texinfo: 命令帮助手册</li>
+<li>sudo: 以非 root 用户身份执行特权命令</li>
+<li>bluez, bluez-utils: 蓝牙相关</li>
+<li>wget, git, openssh: 常用软件</li>
+</ul>
+<h3 id="配置系统">配置系统</h3>
+<h4 id="Fstab">Fstab</h4>
+<p>在启动时安装所需的文件系统</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">genfstab -U /mnt | tee -a /mnt/etc/fstab</span><br></pre></td></tr></table></figure>
+<h4 id="Chroot">Chroot</h4>
+<p>将 root 转换到新系统中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arch-chroot /mnt</span><br></pre></td></tr></table></figure>
+<h4 id="时间">时间</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime</span><br><span class="line">hwclock --systohc</span><br></pre></td></tr></table></figure>
+<h4 id="地区">地区</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cp /etc/locale.gen /etc/locale.gen.bak</span><br><span class="line">sed -i &#x27;/en_US.UTF-8/s/^#//&#x27; /etc/locale.gen</span><br><span class="line">sed -i &#x27;/zh_CN.UTF-8/s/^#//&#x27; /etc/locale.gen</span><br><span class="line">locale-gen</span><br><span class="line">echo &quot;LANG=en_US.UTF-8&quot; | tee -a /etc/locale.conf</span><br></pre></td></tr></table></figure>
+<h4 id="网络配置">网络配置</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;asus&quot; | tee -a /etc/hostname</span><br></pre></td></tr></table></figure>
+<h4 id="Root-密码">Root 密码</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd</span><br></pre></td></tr></table></figure>
+<h4 id="Boot-loader">Boot loader</h4>
+<blockquote>
+<p>Asus Linux 推荐使用 systemd-boot</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">bootctl install</span><br><span class="line">bootctl --variables=no --graceful update</span><br><span class="line"></span><br><span class="line">echo &quot;title   Arch Linux&quot; | tee -a /boot/loader/entries/arch.conf</span><br><span class="line">echo &quot;linux   /vmlinuz-linux&quot; | tee -a /boot/loader/entries/arch.conf</span><br><span class="line">echo &quot;initrd  /amd-ucode.img&quot; | tee -a /boot/loader/entries/arch.conf</span><br><span class="line">echo &quot;initrd  /initramfs-linux.img&quot; | tee -a /boot/loader/entries/arch.conf</span><br><span class="line">echo &quot;options root=PARTUUID=$(blkid -s PARTUUID -o value &lt;root-partition&gt;) rw nvidia_drm.fbdev=1&quot; | tee -a /boot/loader/entries/arch.conf</span><br><span class="line"></span><br><span class="line">echo &quot;default arch.conf&quot; | tee -a /boot/loader/loader.conf</span><br><span class="line">echo &quot;timeout 3&quot; | tee -a /boot/loader/loader.conf</span><br><span class="line">bootctl update</span><br></pre></td></tr></table></figure>
+<h4 id="用户管理">用户管理</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;%wheel ALL=(ALL:ALL) ALL&quot; | tee /etc/sudoers.d/user-access</span><br><span class="line">chmod 0440 /etc/sudoers.d/user-access</span><br><span class="line">visudo -c</span><br><span class="line">useradd -m -G wheel user</span><br><span class="line">passwd user</span><br></pre></td></tr></table></figure>
+<h4 id="将必要服务设置为开机自启动">将必要服务设置为开机自启动</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable NetworkManager.service</span><br><span class="line">systemctl enable ModemManager.service</span><br><span class="line">systemctl enable systemd-resolved.service</span><br><span class="line">systemctl enable bluetooth.service</span><br><span class="line">systemctl enable sshd.service</span><br></pre></td></tr></table></figure>
+<h3 id="重启系统">重启系统</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">exit</span><br><span class="line">cp /etc/pacman.d/mirrorlist.bak /mnt/etc/pacman.d/</span><br><span class="line">umount -R /mnt</span><br><span class="line">poweroff</span><br></pre></td></tr></table></figure>
+<p>关机后移除 U 盘, 并将 Arch Linux 启动项设置为首位 (可选)</p>
+<h3 id="安装后">安装后</h3>
+<p>以非 root 用户登录系统</p>
+<h4 id="添加-asus-linux-源">添加 asus linux 源</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">wget &quot;https://keyserver.ubuntu.com/pks/lookup?op=get&amp;search=0x8b15a6b0e9a3fa35&quot; -O g14.sec</span><br><span class="line">sudo pacman-key -a g14.sec</span><br><span class="line">sudo pacman-key --finger 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35</span><br><span class="line">sudo pacman-key --lsign-key 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35</span><br><span class="line">sudo pacman-key --finger 8F654886F17D497FEFE3DB448B15A6B0E9A3FA35</span><br><span class="line">rm g14.sec</span><br><span class="line">sudo cp /etc/pacman.conf /etc/pacman.conf.bak</span><br><span class="line">echo &quot;&quot; | sudo tee -a /etc/pacman.conf</span><br><span class="line">echo &quot;[g14]&quot; | sudo tee -a /etc/pacman.conf</span><br><span class="line">echo &quot;# Server = https://arch.asus-linux.org&quot; | sudo tee -a /etc/pacman.conf</span><br><span class="line">echo &quot;Server = https://naru.jhyub.dev/\$repo&quot; | sudo tee -a /etc/pacman.conf</span><br><span class="line">sudo sed -i &#x27;/\[multilib\]/,/Include = \/etc\/pacman.d\/mirrorlist/ s/^#//&#x27; /etc/pacman.conf</span><br><span class="line">sudo pacman -Syu</span><br></pre></td></tr></table></figure>
+<h4 id="安装-asusctl">安装 asusctl</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">python-gobject 解决 powerprofilesctl 报错</span></span><br><span class="line">sudo pacman -S asusctl power-profiles-daemon python-gobject</span><br><span class="line">sudo systemctl enable --now power-profiles-daemon.service</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="安装显卡驱动">安装显卡驱动</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S --needed \</span><br><span class="line">    nvidia-open nvidia-utils lib32-nvidia-utils \</span><br><span class="line">    mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon \</span><br><span class="line">    vulkan-icd-loader lib32-vulkan-icd-loader</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="安装-nvidia-laptop-power-cfg">安装 nvidia-laptop-power-cfg</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">git clone https://gitlab.com/asus-linux/nvidia-laptop-power-cfg.git /home/user/nvidia-laptop-power-cfg</span><br><span class="line">cd /home/user/nvidia-laptop-power-cfg</span><br><span class="line">makepkg -sfi</span><br><span class="line">sudo systemctl enable nvidia-suspend.service nvidia-hibernate.service nvidia-resume.service</span><br><span class="line">sudo systemctl enable --now nvidia-powerd</span><br><span class="line">cd /home/user</span><br><span class="line">rm -rf /home/user/nvidia-laptop-power-cfg</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查命令</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cat</span> /proc/driver/nvidia/gpus/&lt;bus_address&gt;/power</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">检查结果应该如下所示</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">S0ix Power Management:</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"> Platform Support:          Supported</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"> Status:                    Enabled</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="安装音视频组件">安装音视频组件</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S --needed \</span><br><span class="line">    libva-nvidia-driver libvdpau-va-gl libva-utils \</span><br><span class="line">    vdpauinfo vulkan-tools</span><br><span class="line">sudo pacman -S --needed \</span><br><span class="line">    sof-firmware alsa-firmware alsa-utils \</span><br><span class="line">    pipewire lib32-pipewire wireplumber \</span><br><span class="line">    pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack lib32-pipewire-jack</span><br><span class="line">systemctl --user enable --now pipewire pipewire-pulse wireplumber</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="安装-KDE-和常用软件">安装 KDE 和常用软件</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S --needed noto-fonts noto-fonts-cjk noto-fonts-emoji</span><br><span class="line">sudo pacman -S --needed plasma-meta konsole dolphin qt6-multimedia-ffmpeg kwalletmanager</span><br><span class="line">sudo pacman -S --needed rog-control-center</span><br><span class="line">sudo pacman -S --needed fcitx5-im fcitx5-chinese-addons fcitx5-pinyin-zhwiki</span><br><span class="line">sudo pacman -S --needed firefox</span><br><span class="line">sudo pacman -S --needed btop</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">测试</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">sudo</span> systemctl start plasmalogin</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">启用桌面</span></span><br><span class="line">sudo systemctl enable plasmalogin</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="一些错误修复">一些错误修复</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S fuse2</span><br><span class="line">sudo pacman -S unzip 7zip tmux tree firewalld ttf-cascadia-code-nerd krdc libayatana-appindicator</span><br><span class="line">sudo systemctl enable firewalld</span><br><span class="line">sudo ln -sf /usr/lib/qt6/bin/qtpaths /usr/bin/qtpaths</span><br><span class="line">sudo cp /etc/asusd/asusd.ron /etc/asusd/asusd.ron.bak</span><br><span class="line">sudo sed -i &#x27;s/platform_profile_on_ac: Performance/platform_profile_on_ac: Quiet/&#x27; /etc/asusd/asusd.ron</span><br><span class="line">asusctl aura effect static -c ffffff</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">执行 <span class="built_in">sudo</span> systemctl restart asusd 会卡住, 原因未知</span></span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<h4 id="修改-KDE-设置">修改 KDE 设置</h4>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group Display --key DimDisplayIdleTimeoutSec -- -1</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group Display --key DimDisplayWhenIdle false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group Display --key TurnOffDisplayIdleTimeoutSec -- -1</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group Display --key TurnOffDisplayWhenIdle false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key AutoSuspendAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key LidAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group AC --group SuspendAndShutdown --key PowerButtonAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group Display --key DimDisplayIdleTimeoutSec -- -1</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group Display --key DimDisplayWhenIdle false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group Display --key TurnOffDisplayIdleTimeoutSec -- -1</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group Display --key TurnOffDisplayWhenIdle false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group SuspendAndShutdown --key AutoSuspendAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group SuspendAndShutdown --key LidAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group Battery --group SuspendAndShutdown --key PowerButtonAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group BatteryManagement --key BatteryCriticalAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group Display --key DimDisplayIdleTimeoutSec -- -1</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group Display --key DimDisplayWhenIdle false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group Display --key TurnOffDisplayIdleTimeoutSec -- -1</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group Display --key TurnOffDisplayWhenIdle false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group Display --key UseProfileSpecificDisplayBrightness false</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group SuspendAndShutdown --key AutoSuspendAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group SuspendAndShutdown --key LidAction 0</span><br><span class="line">kwriteconfig6 --file powerdevilrc --group LowBattery --group SuspendAndShutdown --key PowerButtonAction 0</span><br><span class="line">kwriteconfig6 --file kscreenlockerrc --group Daemon --key Autolock false</span><br><span class="line">kwriteconfig6 --file kscreenlockerrc --group Daemon --key LockGrace 0</span><br><span class="line">kwriteconfig6 --file kscreenlockerrc --group Daemon --key Timeout 0</span><br><span class="line">kwriteconfig6 --file systemsettingsrc --group systemsettings_sidebar_mode --key HighlightNonDefaultSettings true</span><br><span class="line">plasma-apply-lookandfeel --apply org.kde.breezedark.desktop</span><br></pre></td></tr></table></figure>
+<h4 id="TODO">TODO</h4>
+<p>需要手动修改的选项 (暂时未找到较好的命令修改方法):</p>
+<ul>
+<li>系统设置
+<ul>
+<li>鼠标和触摸板
+<ul>
+<li>触摸板
+<ul>
+<li>反向滚动 <code>开</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>键盘
+<ul>
+<li>虚拟键盘
+<ul>
+<li>选择 <code>Fcitx 5 Wayland 启动器</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>登录屏幕
+<ul>
+<li>点击 <code>应用 Plasma 设置</code> (在修改完其他设置之后点击)</li>
+</ul>
+</li>
+<li>KDE 密码库
+<ul>
+<li>启用 KDE 密码库子系统 <code>关</code></li>
+</ul>
+</li>
+<li>区域和语言
+<ul>
+<li>语言 修改
+<ul>
+<li>添加 <code>简体中文</code> 并置顶</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>日期和时间
+<ul>
+<li>自动设置日期和时间 <code>开</code></li>
+</ul>
+</li>
+<li>输入法
+<ul>
+<li>添加输入法 <code>拼音</code></li>
+<li>拼音
+<ul>
+<li>启用云拼音</li>
+</ul>
+</li>
+<li>配置附加组件
+<ul>
+<li>经典用户界面
+<ul>
+<li>主题 <code>KDE Plasma (实验性)</code></li>
+<li>深色主题 <code>KDE Plasma (实验性)</code></li>
+<li>跟随系统浅色 / 深色设置 <code>开</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>显示面板 (类似 Windows 的任务栏) 设置
+<ul>
+<li>面板设置
+<ul>
+<li>显示 / 隐藏 <code>避开窗口</code></li>
+</ul>
+</li>
+<li>副屏设置为主屏面板的副本</li>
+</ul>
+</li>
+<li>ROG Control Center
+<ul>
+<li>App Settings
+<ul>
+<li>Run in background after closing <code>close</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Dolphin 文件管理器
+<ul>
+<li>显示隐藏文件 <code>开</code></li>
+<li>显示菜单栏 <code>开</code></li>
+<li>配置 Dolphin
+<ul>
+<li>启动时显示 <code>/home/user</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>需要添加的脚本</p>
+<ul>
+<li>修改 SSH 默认端口</li>
+<li>防火墙允许特定端口号</li>
+<li>自动解压并写入应用程序启动器 (类似 Windows 的开始菜单) 的一些 portable app (目前包括 localsend, v2rayn, vscode)</li>
+</ul>
+<h2 id="可能出现的问题">可能出现的问题</h2>
+<h3 id="笔记本切换到独显直连模式后-kde-桌面出现幽灵显示器">笔记本切换到独显直连模式后 kde 桌面出现幽灵显示器</h3>
+<p>arch linux 官方内核默认启用 simpledrm 驱动显示开机 log (同时该虚拟显示输出设备被命名为 Unknown-1), 若 simpledrm 与独立显卡驱动之间移交存在问题, 就会出现额外的幽灵显示器<br><br>
+通过规范 NVIDIA 帧缓冲参数, 即添加内核启动参数 <code>nvidia_drm.fbdev=1</code> 解决<br><br>
+根据 arch wiki, <code>nvidia_drm.modeset=1</code> 与 <code>nvidia_drm.fbdev=1</code> 由 nvidia-utils 自动添加, 但后者未生效, 原因暂时不明</p>
+<h3 id="plasmalogin-的显示器设置与-kde-不同步">plasmalogin 的显示器设置与 kde 不同步</h3>
+<p>需要点击系统设置-登录屏幕-应用 Plasma 设置进行手动同步</p>
+<h3 id="kde-wallet-密码与用户密码不一致">kde wallet 密码与用户密码不一致</h3>
+<p>可能是在安装配置完毕后手动修改了用户密码, kde wallet 密码不遵循更改, 仍然是第一次设置的密码<br><br>
+可通过 kwalletmanager 修改密码</p>
+<h3 id="修复-appimage-运行报错-error-loading-libfuse-so-2">修复 appimage 运行报错 error loading libfuse.so.2</h3>
+<p>安装 fuse2 <code>sudo pacman -S fuse2</code></p>
+<h3 id="提示-usr-bin-xdg-mime-行-885-qtpaths-未找到命令">提示 /usr/bin/xdg-mime: 行 885: qtpaths: 未找到命令</h3>
+<p>qtpaths 实际位置: <code>/usr/lib/qt6/bin/qtpaths</code>, <code>/usr/lib/qt6/bin/qtpaths6</code><br><br>
+创建软链接: <code>sudo ln -sf /usr/lib/qt6/bin/qtpaths /usr/bin/qtpaths</code></p>
+<h3 id="某些应用无法开启系统托盘图标">某些应用无法开启系统托盘图标</h3>
+<p>安装 libayatana-appindicator <code>sudo pacman -S libayatana-appindicator</code></p>
+<h3 id="配置-tensorflow-环境">配置 tensorflow 环境</h3>
+<blockquote>
+<p>注意: 此内容质量低下, 且不应属于该部分内容, 须移至其他部分</p>
+</blockquote>
+<p>为了使系统干净整洁, 建议通过 docker 配置环境<br><br>
+首先安装 docker 和 nvidia-container-toolkit, 使用 docker 时通过手动启用 docker 服务 <code>sudo systemctl start docker.socket</code> (对于个人用户启用 docker.socket 而不是 docker.server 更快, 并且为了减少系统待机占用选择不自启动 docker 服务)<br><br>
+由于 tensorflow 的官方镜像无法调用 gpu, 选择镜像 <code>nvidia/cuda:12.5.1-cudnn-devel-ubuntu22.04</code>, 注意这里的 cuda tooklit 版本选择, 宿主机通过 nvidia-smi 查看的 cuda 版本不一定是tensorflow所使用的, 需要通过执行 python 脚本 <code>python3 -c &quot;import tensorflow as tf; print(tf.sysconfig.get_build_info())&quot;</code> 来查看 tensorflow 使用的 cuda toolkit 版本, 或者在官网查看 <a target="_blank" rel="noopener" href="https://www.tensorflow.org/install/source">https://www.tensorflow.org/install/source</a><br><br>
+然后创建容器, 在容器内部安装 python, 并通过 pip 安装 tensorflow <code>pip3 install tensorflow[and-cuda]</code>, 这里遵循官方教程即可, 由于容器已经安装好 cuda 和 cudnn, 无需再次安装<br><br>
+最后通过 <code>python3 -c &quot;import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))&quot;</code> 检查 gpu 是否可用<br><br>
+命令总结如下:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo pacman -S docker nvidia-container-toolkit</span><br><span class="line">sudo systemctl start docker.socket</span><br><span class="line">sudo docker pull nvidia/cuda:12.5.1-cudnn-devel-ubuntu22.04</span><br><span class="line">sudo docker run --rm -it --gpus all nvidia/cuda:12.5.1-cudnn-devel-ubuntu22.04 bash</span><br><span class="line">apt update &amp;&amp; apt install python3 python3-pip python3-venv</span><br><span class="line">mkdir tensorflow-playground &amp;&amp; cd tensorflow-playground</span><br><span class="line">python3 -m venv .venv &amp;&amp; source .venv/bin/activate</span><br><span class="line">pip3 install --upgrade pip</span><br><span class="line">pip3 install tensorflow[and-cuda]</span><br><span class="line">python3 -c &quot;import tensorflow as tf; print(tf.config.list_physical_devices(&#x27;GPU&#x27;))&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="参考链接">参考链接</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://asus-linux.org/guides/arch-guide/">https://asus-linux.org/guides/arch-guide/</a></li>
+<li><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Installation_guide">https://wiki.archlinux.org/title/Installation_guide</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://7att1ce.github.io/blog">Lattice</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://7att1ce.github.io/blog/2026/05/29/arch-linux-installation-guide/">https://7att1ce.github.io/blog/2026/05/29/arch-linux-installation-guide/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://7att1ce.github.io/blog" target="_blank">Lattice's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/blog/tags/Linux/">Linux</a></div><div class="post-share"><div class="social-share" data-image="https://redive.estertion.win/bang/card/019075_card_after_training.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/blog/2026/06/04/arch-linux-kvm-install/" title="Arch Linux 部署 kvm 虚拟机记录"><img class="cover" src="https://redive.estertion.win/bang/card/022077_card_after_training.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Arch Linux 部署 kvm 虚拟机记录</div></div><div class="info-2"><div class="info-item-1">安装 1sudo pacman -S --needed qemu-desktop virt-manager dnsmasq swtpm  qemu-desktop: 与 kvm 搭配使用, kvm 只负责 cpu 和 内存的虚拟化, 其他虚拟化 qemu 负责. 相比 qemu-base 补充了图形相关内容, 相比 qemu-full 削减了不必要的其他 cpu 架构的模拟. 包含了 edk2-ovmf 软件包 virt-manager: libvirt 的 gui 前端, 包含了 libvirt 软件包 dnsmasq: nat 模式下提供 dhcp 和 dns 服务 swtpm: tpm 模拟, windows 11 可能需要  配置 自启动 libvirt 服务  根据 libvirt 官方说明, 此方法未来会被弃用, 转变为模块化守护进程 启动模块化守护进程命令: 12345for drv in qemu interface network nodedev nwfilter secret storagedo    systemctl enable virt$&#123;d...</div></div></div></a><a class="pagination-related" href="/blog/2026/05/01/windows-gpedit/" title="Windows 11 组策略关于找不到资源 presentation.LetAppsAccessPasskeys 引用的临时解决方案"><img class="cover" src="https://redive.estertion.win/bang/card/011083_card_after_training.webp" onerror="onerror=null;src='/blog/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Windows 11 组策略关于找不到资源 presentation.LetAppsAccessPasskeys 引用的临时解决方案</div></div><div class="info-2"><div class="info-item-1">打开本地组策略编辑器出现提示 找不到资源&quot;$(presentation.LetAppsAccessPasskeys)&quot;(在属性 presentation 中引用). 文件 C:\WINDOWS\PolicyDefinitions\AppPrivacy.admx, 行 405, 列 268 问题产生的影响: 缺失 计算机配置-管理模板-Windows 组件-应用隐私 出现问题的版本: Windows 11 25H2 26200.8313 出现问题的组策略模板: C:\Windows\PolicyDefinitions\AppPrivacy.admx 与 C:\Windows\PolicyDefinitions\zh-CN\AppPrivacy.adml, AppPrivacy.adml 的位置依据系统语言而定 与 Windows 11 25H2 26200.8246 的 AppPrivacy.admx 和 AppPrivacy.adml 相比多出以下内容: AppPrivacy.admx: 123456789101112131415161718192021222...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/blog/2026/02/04/vps-config/" title="VPS 配置记录"><img class="cover" src="https://redive.estertion.win/bang/card/013074_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-02-10</div><div class="info-item-2">VPS 配置记录</div></div><div class="info-2"><div class="info-item-1"> Linux 发行版: Debian  系统和软件包更新到最新 1234567# 别忘记修改 root 密码passwd root# root 用户apt update &amp;&amp; apt full-upgrade -y &amp;&amp; apt autoremove -y &amp;&amp; apt autoclean &amp;&amp; apt clean# 非 root 用户使用 sudo# sudo apt update &amp;&amp; sudo apt full-upgrade -y &amp;&amp; sudo apt autoremove -y &amp;&amp; sudo apt autoclean &amp;&amp; sudo apt cleanreboot 创建用户 普通用户切换到 root 用户, 同时切换工作环境 12# root 用户可忽略su - root 创建用户 1234567apt install sudo# 创建用户, 并添加到 sudo/whell 组, 设置默认 shell 为 bash# useradd -m...</div></div></div></a><a class="pagination-related" href="/blog/2026/06/04/arch-linux-kvm-install/" title="Arch Linux 部署 kvm 虚拟机记录"><img class="cover" src="https://redive.estertion.win/bang/card/022077_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-06-04</div><div class="info-item-2">Arch Linux 部署 kvm 虚拟机记录</div></div><div class="info-2"><div class="info-item-1">安装 1sudo pacman -S --needed qemu-desktop virt-manager dnsmasq swtpm  qemu-desktop: 与 kvm 搭配使用, kvm 只负责 cpu 和 内存的虚拟化, 其他虚拟化 qemu 负责. 相比 qemu-base 补充了图形相关内容, 相比 qemu-full 削减了不必要的其他 cpu 架构的模拟. 包含了 edk2-ovmf 软件包 virt-manager: libvirt 的 gui 前端, 包含了 libvirt 软件包 dnsmasq: nat 模式下提供 dhcp 和 dns 服务 swtpm: tpm 模拟, windows 11 可能需要  配置 自启动 libvirt 服务  根据 libvirt 官方说明, 此方法未来会被弃用, 转变为模块化守护进程 启动模块化守护进程命令: 12345for drv in qemu interface network nodedev nwfilter secret storagedo    systemctl enable virt$&#123;d...</div></div></div></a><a class="pagination-related" href="/blog/2026/06/30/arch-install-new/" title="Arch Linux 通用安装教程 *"><img class="cover" src="https://redive.estertion.win/bang/card/014076_card_after_training.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="fas fa-history fa-fw"></i> 2026-06-30</div><div class="info-item-2">Arch Linux 通用安装教程 *</div></div><div class="info-2"><div class="info-item-1"> * 通用安装教程是本文编写目标 本文主要涉及 ASUS 和 ThinkPad 笔记本的安装, 其余设备仅具备一些参考性 本文内容过于简略, 如果有任何疑问请参考 ArchWiki  安装步骤 务必在 UEFI 页面关闭安全启动功能, 建议关闭快速启动功能 启动到 archiso 实时环境  关于下载 ISO 和如何启动到 archiso 的相关内容请参考 ArchWiki  连接到互联网 最简单的方式就是使用有线网连接网络  若使用无线网络, 则使用 iwctl 连接, 步骤如下: 查看无线网卡设备并确保已开启 1iwctl device list 扫描并查看可用网络 12iwctl station &lt;device&gt; scaniwctl station &lt;device&gt; get-networks 连接网络 1iwctl station &lt;device&gt; connect &lt;SSID&gt;   网络连接默认尝试 DHCP 分配 IP, 若有其他需求如静态分配 IP 请参考 ArchWiki   检查互联网连接 1ping ping.arc...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/blog/img/avatar.png" onerror="this.onerror=null;this.src='/blog/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Lattice</div><div class="author-info-description"></div><div class="site-data"><a href="/blog/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/blog/tags/"><div class="headline">标签</div><div class="length-num">16</div></a><a href="/blog/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/7att1ce"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my blog.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">1.</span> <span class="toc-text">硬件配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.</span> <span class="toc-text">安装步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E5%AE%89%E8%A3%85"><span class="toc-number">2.1.</span> <span class="toc-text">预安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%B6%E4%BD%9C-USB-%E5%90%AF%E5%8A%A8%E7%9B%98%E5%B9%B6%E5%90%AF%E5%8A%A8-live-%E7%8E%AF%E5%A2%83"><span class="toc-number">2.1.1.</span> <span class="toc-text">制作 USB 启动盘并启动 live 环境</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%B0%E4%BA%92%E8%81%94%E7%BD%91"><span class="toc-number">2.1.2.</span> <span class="toc-text">连接到互联网</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%92%9F"><span class="toc-number">2.1.3.</span> <span class="toc-text">更新系统时钟</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-number">2.1.4.</span> <span class="toc-text">磁盘分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%88%86%E5%8C%BA"><span class="toc-number">2.1.5.</span> <span class="toc-text">格式化分区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8C%82%E8%BD%BD%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.1.6.</span> <span class="toc-text">挂载文件系统</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85"><span class="toc-number">2.2.</span> <span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E9%95%9C%E5%83%8F"><span class="toc-number">2.2.1.</span> <span class="toc-text">选择镜像</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-number">2.2.2.</span> <span class="toc-text">安装必要软件包</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.3.</span> <span class="toc-text">配置系统</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Fstab"><span class="toc-number">2.3.1.</span> <span class="toc-text">Fstab</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Chroot"><span class="toc-number">2.3.2.</span> <span class="toc-text">Chroot</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%97%B6%E9%97%B4"><span class="toc-number">2.3.3.</span> <span class="toc-text">时间</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%B0%E5%8C%BA"><span class="toc-number">2.3.4.</span> <span class="toc-text">地区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE"><span class="toc-number">2.3.5.</span> <span class="toc-text">网络配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Root-%E5%AF%86%E7%A0%81"><span class="toc-number">2.3.6.</span> <span class="toc-text">Root 密码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Boot-loader"><span class="toc-number">2.3.7.</span> <span class="toc-text">Boot loader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86"><span class="toc-number">2.3.8.</span> <span class="toc-text">用户管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B0%86%E5%BF%85%E8%A6%81%E6%9C%8D%E5%8A%A1%E8%AE%BE%E7%BD%AE%E4%B8%BA%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8"><span class="toc-number">2.3.9.</span> <span class="toc-text">将必要服务设置为开机自启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E5%90%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">2.4.</span> <span class="toc-text">重启系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%90%8E"><span class="toc-number">2.5.</span> <span class="toc-text">安装后</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0-asus-linux-%E6%BA%90"><span class="toc-number">2.5.1.</span> <span class="toc-text">添加 asus linux 源</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-asusctl"><span class="toc-number">2.5.2.</span> <span class="toc-text">安装 asusctl</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="toc-number">2.5.3.</span> <span class="toc-text">安装显卡驱动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-nvidia-laptop-power-cfg"><span class="toc-number">2.5.4.</span> <span class="toc-text">安装 nvidia-laptop-power-cfg</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E9%9F%B3%E8%A7%86%E9%A2%91%E7%BB%84%E4%BB%B6"><span class="toc-number">2.5.5.</span> <span class="toc-text">安装音视频组件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-KDE-%E5%92%8C%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6"><span class="toc-number">2.5.6.</span> <span class="toc-text">安装 KDE 和常用软件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80%E4%BA%9B%E9%94%99%E8%AF%AF%E4%BF%AE%E5%A4%8D"><span class="toc-number">2.5.7.</span> <span class="toc-text">一些错误修复</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-KDE-%E8%AE%BE%E7%BD%AE"><span class="toc-number">2.5.8.</span> <span class="toc-text">修改 KDE 设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#TODO"><span class="toc-number">2.5.9.</span> <span class="toc-text">TODO</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%83%BD%E5%87%BA%E7%8E%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.</span> <span class="toc-text">可能出现的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%94%E8%AE%B0%E6%9C%AC%E5%88%87%E6%8D%A2%E5%88%B0%E7%8B%AC%E6%98%BE%E7%9B%B4%E8%BF%9E%E6%A8%A1%E5%BC%8F%E5%90%8E-kde-%E6%A1%8C%E9%9D%A2%E5%87%BA%E7%8E%B0%E5%B9%BD%E7%81%B5%E6%98%BE%E7%A4%BA%E5%99%A8"><span class="toc-number">3.1.</span> <span class="toc-text">笔记本切换到独显直连模式后 kde 桌面出现幽灵显示器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#plasmalogin-%E7%9A%84%E6%98%BE%E7%A4%BA%E5%99%A8%E8%AE%BE%E7%BD%AE%E4%B8%8E-kde-%E4%B8%8D%E5%90%8C%E6%AD%A5"><span class="toc-number">3.2.</span> <span class="toc-text">plasmalogin 的显示器设置与 kde 不同步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kde-wallet-%E5%AF%86%E7%A0%81%E4%B8%8E%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E4%B8%8D%E4%B8%80%E8%87%B4"><span class="toc-number">3.3.</span> <span class="toc-text">kde wallet 密码与用户密码不一致</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E5%A4%8D-appimage-%E8%BF%90%E8%A1%8C%E6%8A%A5%E9%94%99-error-loading-libfuse-so-2"><span class="toc-number">3.4.</span> <span class="toc-text">修复 appimage 运行报错 error loading libfuse.so.2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E7%A4%BA-usr-bin-xdg-mime-%E8%A1%8C-885-qtpaths-%E6%9C%AA%E6%89%BE%E5%88%B0%E5%91%BD%E4%BB%A4"><span class="toc-number">3.5.</span> <span class="toc-text">提示 &#x2F;usr&#x2F;bin&#x2F;xdg-mime: 行 885: qtpaths: 未找到命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%90%E4%BA%9B%E5%BA%94%E7%94%A8%E6%97%A0%E6%B3%95%E5%BC%80%E5%90%AF%E7%B3%BB%E7%BB%9F%E6%89%98%E7%9B%98%E5%9B%BE%E6%A0%87"><span class="toc-number">3.6.</span> <span class="toc-text">某些应用无法开启系统托盘图标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-tensorflow-%E7%8E%AF%E5%A2%83"><span class="toc-number">3.7.</span> <span class="toc-text">配置 tensorflow 环境</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">4.</span> <span class="toc-text">参考链接</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/06/30/arch-install-new/" title="Arch Linux 通用安装教程 *"><img src="https://redive.estertion.win/bang/card/014076_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Arch Linux 通用安装教程 *"/></a><div class="content"><a class="title" href="/blog/2026/06/30/arch-install-new/" title="Arch Linux 通用安装教程 *">Arch Linux 通用安装教程 *</a><time datetime="2026-06-30T11:00:00.000Z" title="发表于 2026-06-30 11:00:00">2026-06-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/06/05/windows10-unattend/" title="Windows 10 应答文件 (unattend.xml) 制作记录 (WIP)"><img src="https://redive.estertion.win/bang/card/037010_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Windows 10 应答文件 (unattend.xml) 制作记录 (WIP)"/></a><div class="content"><a class="title" href="/blog/2026/06/05/windows10-unattend/" title="Windows 10 应答文件 (unattend.xml) 制作记录 (WIP)">Windows 10 应答文件 (unattend.xml) 制作记录 (WIP)</a><time datetime="2026-06-05T15:00:00.000Z" title="发表于 2026-06-05 15:00:00">2026-06-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/06/05/windows-unattend/" title="Windows 应答文件 (unattend.xml) 制作记录 (WIP)"><img src="https://redive.estertion.win/bang/card/021078_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Windows 应答文件 (unattend.xml) 制作记录 (WIP)"/></a><div class="content"><a class="title" href="/blog/2026/06/05/windows-unattend/" title="Windows 应答文件 (unattend.xml) 制作记录 (WIP)">Windows 应答文件 (unattend.xml) 制作记录 (WIP)</a><time datetime="2026-06-05T14:00:00.000Z" title="发表于 2026-06-05 14:00:00">2026-06-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/06/04/arch-linux-kvm-install/" title="Arch Linux 部署 kvm 虚拟机记录"><img src="https://redive.estertion.win/bang/card/022077_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Arch Linux 部署 kvm 虚拟机记录"/></a><div class="content"><a class="title" href="/blog/2026/06/04/arch-linux-kvm-install/" title="Arch Linux 部署 kvm 虚拟机记录">Arch Linux 部署 kvm 虚拟机记录</a><time datetime="2026-06-04T13:30:00.000Z" title="发表于 2026-06-04 13:30:00">2026-06-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/blog/2026/05/29/arch-linux-installation-guide/" title="Arch Linux 安装记录"><img src="https://redive.estertion.win/bang/card/019075_card_after_training.webp" onerror="this.onerror=null;this.src='/blog/img/404.jpg'" alt="Arch Linux 安装记录"/></a><div class="content"><a class="title" href="/blog/2026/05/29/arch-linux-installation-guide/" title="Arch Linux 安装记录">Arch Linux 安装记录</a><time datetime="2026-05-29T20:00:00.000Z" title="发表于 2026-05-29 20:00:00">2026-05-29</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2021 - 2026 By Lattice</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.5</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/blog/js/utils.js?v=5.5.5"></script><script src="/blog/js/main.js?v=5.5.5"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': '7att1ce/blog-discussion',
+      'data-repo-id': 'R_kgDOROnAFA',
+      'data-category-id': 'DIC_kwDOROnAFM4C2SDN',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
